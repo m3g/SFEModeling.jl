@@ -9,7 +9,7 @@ solute loading (kg/kg) and ``m_s`` is the solid mass (kg).
 
 ## Sovová (1994) — Broken and Intact Cells
 
-The only **mechanistic** model in the set. It distinguishes two fractions of the solid:
+A **mechanistic** model that distinguishes two fractions of the solid:
 easily accessible solute (outside broken cells) and solute trapped inside intact cells.
 Extraction proceeds through three consecutive phases: constant extraction rate (CER),
 falling extraction rate (FER), and diffusion-controlled (DC).
@@ -124,6 +124,30 @@ m_e(t) = \begin{cases}
 | ``k_4`` | End time of FER phase (s), ``k_4 > k_2`` |
 
 **Reference:** Rodrigues, V.M. *et al.* (2003). *J. Agric. Food Chem.*, 51(6), 1518–1523. [doi:10.1021/jf0257493](https://doi.org/10.1021/jf0257493)
+
+---
+
+## Shrinking Core Model (Goto, Roy & Hirose, 1996)
+
+A **mechanistic** model describing diffusion-limited leaching from a spherical solid
+particle whose extractable core shrinks as solute is removed. The pseudo-steady-state
+(PSS) analytical solution relates the core radius ``s`` to non-dimensional time via:
+
+```math
+\frac{s^3 - 1}{3} - \frac{s^2 - 1}{2} - \frac{s - 1}{T_m} = t
+```
+
+where ``T_m = R k / D`` is the Thiele modulus, and ``t`` is non-dimensional time
+scaled by the growth time-scale ``\tau_g``: ``t = t_{\mathrm{dim}} / \tau_g``.
+
+The reacted (extracted) volume fraction is ``X(t) = 1 - s^3``.
+
+| Symbol | Description |
+|--------|-------------|
+| ``T_m`` | Thiele modulus ``R k / D`` (dimensionless) |
+| ``\tau_g`` | Growth time-scale (s) |
+
+**Reference:** Goto, M.; Roy, B.C.; Hirose, T. (1996). Shrinking-core leaching model for supercritical-fluid extraction. *J. Supercrit. Fluids*, 9(2), 128–133. [doi:10.1016/S0896-8446(96)90009-1](https://doi.org/10.1016/S0896-8446(96)90009-1)
 
 ---
 

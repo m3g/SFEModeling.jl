@@ -1,12 +1,12 @@
 module SFEModeling
 
-using BlackBoxOptim
-using DelimitedFiles: readdlm
-using Printf
-using XLSX
-using HTTP
-using JSON3
+import Printf
+import XLSX
+import HTTP
+import JSON3
+using BlackBoxOptim: bboptimize, best_candidate, best_fitness
 using Roots: find_zero
+using DelimitedFiles: readdlm
 
 export ExtractionCurve, TextTable, ExcelTable, sfegui, create_shortcut, export_results
 export ExtractionModel, ParamSpec, ModelFitResult, fit_model, param_spec, simulate

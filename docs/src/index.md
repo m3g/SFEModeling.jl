@@ -12,7 +12,7 @@ SFEModeling.jl fits kinetic models for supercritical fluid extraction (SFE) to o
 experimental extraction curves. The package:
 
 - Accepts experimental data and operating conditions in **laboratory units** (g, cm, min).
-- Supports **8 kinetic models**, from a rigorous PDE model to simple empirical correlations.
+- Supports **6 kinetic models**, from rigorous PDE/physical models to simple empirical correlations.
 - Fits model parameters using global optimization from
   [BlackBoxOptim.jl](https://github.com/robertfeldt/BlackBoxOptim.jl) — no manual
   multi-start needed.
@@ -23,6 +23,7 @@ experimental extraction curves. The package:
 | Model | Parameters | Description |
 |-------|-----------|-------------|
 | Sovová (1994) | `kya`, `kxa`, `xk/x0` | PDE — broken & intact cells; multi-curve with shared `xk/x0` |
+| Shrinking Core — Goto *et al.* (1996) | `Tm`, `tau_g` | Physical — diffusion-limited leaching |
 | Esquível (1999) | `k1` | Empirical — single exponential |
 | Zekovic (2003) | `k1`, `k2` | Empirical — accessible fraction × exponential |
 | PKM — Maksimovic (2012) | `k1`, `k2`, `k3` | Parallel-reaction kinetics |
