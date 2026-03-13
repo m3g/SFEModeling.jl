@@ -13,7 +13,7 @@ jobs:
       contents: write   # needed to create/update the release and upload assets
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # Strip the leading 'v' from the tag (v1.0.16 -> 1.0.16).
       # Falls back to "dev" on manual workflow_dispatch runs without a tag.
