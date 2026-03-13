@@ -140,6 +140,7 @@ table.data tr:hover td{background:#fafafa}
 <label>Extraction model
   <select id="model-select">
     <option value="sovova" selected>Sovová (1994) — Broken and Intact Cells</option>
+    <option value="shrinkingcore">Shrinking Core (2026) — physical diffusion/reaction</option>
     <option value="esquivel">Esquível (1999) — single exponential</option>
     <option value="zekovic">Zeković (2003) — accessible fraction + rate</option>
     <option value="pkm">PKM — Maksimovic (2012) — parallel reactions</option>
@@ -770,8 +771,11 @@ function _start_gui(port::Int, launch::Bool)
 
             _gui_result[] = (result, curves)
 
+            # Use the struct type name for display (e.g. "Sovova", "PKM")
+            display_name = string(nameof(typeof(result.model)))
+
             return HTTP.Response(200, ["Content-Type" => "application/json"],
-                JSON3.write(Dict("charts" => charts, "params" => params, "model" => model_name)))
+                JSON3.write(Dict("charts" => charts, "params" => params, "model" => display_name)))
         catch e
             return HTTP.Response(200, ["Content-Type" => "application/json"],
                 JSON3.write(Dict("error" => sprint(showerror, e))))

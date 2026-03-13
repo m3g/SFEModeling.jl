@@ -207,6 +207,7 @@ models that can be fitted with [`fit_model`](@ref):
 
 | Model type | Reference | Parameters |
 |:---|:---|:---|
+| `ShrinkingCoreModel()` | Moreno-Pulido *et al.* (2026) | Tₘ — Thiele modulus (—); τ_g — growth time-scale (s) |
 | `Esquivel()` | Esquivel (1999) | k₁ — rate constant (1/s) |
 | `Zekovic()` | Žeković (2003) | k₁ — accessible yield fraction (—); k₂ — rate constant (1/s) |
 | `PKM()` | Fiori et al. (2012) | k₁ — easily accessible fraction (—); k₂ — fluid-phase rate (1/s); k₃ — solid-phase rate (1/s) |
