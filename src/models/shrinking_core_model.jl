@@ -1,4 +1,4 @@
-# ── Shrinking Core Model helper functions ─────────────────────────────────────
+# ── Shrinking Core Model (Goto, Roy & Hirose, 1996) ──────────────────────────
 #
 # Goto, Roy & Hirose (1996), J. Supercrit. Fluids 9, 128–133
 # Moreno Pulido et al. (2025), arXiv:2507.21042v1
@@ -9,6 +9,43 @@
 #
 # where  Tₘ = R*k/D  (Thiele modulus),  t  is non-dimensional time scaled by τ_g.
 # The reacted fraction is  X(t) = 1 − s³.
+
+"""
+    ShrinkingCoreModel()
+
+Shrinking Core Model for supercritical fluid extraction (Goto, Roy & Hirose, 1996).
+
+The model describes diffusion-limited leaching from a spherical solid particle whose
+extractable core shrinks as solute is removed.  The pseudo-steady-state (PSS) analytical
+solution relates the core radius ``s`` to non-dimensional time via
+
+```math
+\\frac{s^3 - 1}{3} - \\frac{s^2 - 1}{2} - \\frac{s - 1}{T_m} = t
+```
+
+Two fitted parameters:
+- `Tm`    — Thiele modulus ``T_m = R k / D`` (—)
+- `tau_g` — growth time-scale ``\\tau_g`` (s), used to convert experimental time to
+  non-dimensional time: ``t = t_{\\mathrm{dim}} / \\tau_g``
+"""
+struct ShrinkingCoreModel <: ExtractionModel end
+
+param_spec(::ShrinkingCoreModel) = [
+    ParamSpec("Tm",    "Tₘ — Thiele modulus R·k/D (—)",        0.01,  100.0),
+    ParamSpec("tau_g", "τ_g — growth time-scale (s)",          1.0,   1e5),
+]
+
+function simulate(::ShrinkingCoreModel, curve::ExtractionCurve, p::Vector{Float64})
+    m_total = curve.x0 * curve.solid_mass
+    Tm, tau_g = p[1], p[2]
+    return map(curve.t) do t_dim
+        t_nondim = t_dim / tau_g
+        s = shrinking_core_pss(t_nondim, Tm)
+        m_total * reacted_fraction(s)
+    end
+end
+
+# ── Helper functions ──────────────────────────────────────────────────────────
 
 """
     _pss_time(s, Tm)
