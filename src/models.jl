@@ -8,6 +8,14 @@
 # The total extractable mass is  m_total = curve.x0 * curve.solid_mass  (kg).
 
 abstract type ExtractionModel end
+"""
+    ShrinkingCoreModel()
+
+Shrinking Core Model for supercritical fluid extraction.
+Implements the pseudo-steady-state (PSS) solution and limiting cases.
+Parameters: Tm (Thiele modulus), regime (0: PSS, 1: kinetic, 2: diffusion)
+"""
+struct ShrinkingCoreModel <: ExtractionModel end
 
 """
     Sovova()
@@ -131,6 +139,11 @@ param_spec(::SplineModel) = [
     ParamSpec("k4", "k₄ — FER end time (s)",            0.0, 7200.0),
 ]
 
+param_spec(::ShrinkingCoreModel) = [
+    ParamSpec("Tm",    "Tₘ — Thiele modulus R·k/D (—)",        0.01,  100.0),
+    ParamSpec("tau_g", "τ_g — growth time-scale (s)",          1.0,   1e5),
+]
+
 # ── Simulate functions ────────────────────────────────────────────────────────
 
 function simulate(::Esquivel, curve::ExtractionCurve, p::Vector{Float64})
@@ -168,6 +181,16 @@ function simulate(::SplineModel, curve::ExtractionCurve, p::Vector{Float64})
         else
             m_fer  # DC phase: flat
         end
+    end
+end
+
+function simulate(::ShrinkingCoreModel, curve::ExtractionCurve, p::Vector{Float64})
+    m_total = curve.x0 * curve.solid_mass
+    Tm, tau_g = p[1], p[2]
+    return map(curve.t) do t_dim
+        t_nondim = t_dim / tau_g          # convert seconds → non-dimensional
+        s = shrinking_core_pss(t_nondim, Tm)
+        m_total * reacted_fraction(s)
     end
 end
 
@@ -324,6 +347,7 @@ end
 
 const _MODEL_REGISTRY = Dict{String, ExtractionModel}(
     "sovova"    => Sovova(),
+    "shrinkingcore" => ShrinkingCoreModel(),
     "esquivel"  => Esquivel(),
     "zekovic"   => Zekovic(),
     "pkm"       => PKM(),

@@ -144,6 +144,7 @@ table.data tr:hover td{background:#fafafa}
     <option value="zekovic">Zeković (2003) — accessible fraction + rate</option>
     <option value="pkm">PKM — Maksimovic (2012) — parallel reactions</option>
     <option value="spline">Spline (2003) — piecewise-linear CER/FER/DC</option>
+    <option value="shrinkingcore">Shrinking Core Model — physical diffusion/reaction</option>
   </select>
 </label>
 </fieldset>

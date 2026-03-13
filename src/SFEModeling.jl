@@ -6,11 +6,13 @@ using Printf
 using XLSX
 using HTTP
 using JSON3
+using Roots: find_zero
 
 export ExtractionCurve, TextTable, ExcelTable, sfegui, create_shortcut, export_results
 export ExtractionModel, ParamSpec, ModelFitResult, fit_model, param_spec, simulate
-export Sovova, Esquivel, Zekovic, PKM, SplineModel
+export Sovova, Esquivel, Zekovic, PKM, SplineModel, ShrinkingCoreModel
 
+include("models/shrinking_core_model.jl")
 
 """
     ExtractionCurve(; data, ...)

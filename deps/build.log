@@ -1,12 +1,12 @@
 Precompiling packages...
-   1470.9 ms  ✓ SFEModeling
-  1 dependency successfully precompiled in 2 seconds. 94 already precompiled.
+   1707.7 ms  ✓ SFEModeling
+  1 dependency successfully precompiled in 2 seconds. 91 already precompiled.
 
   ╔══════════════════════════════════════════════════════════╗
   ║                                                          ║
   ║   SFEModeling desktop shortcut created successfully!     ║
   ║                                                          ║
-  ║   /Users/leandro/Desktop/SFEModeling.app                 ║
+  ║   /home/leandro/Desktop/SFEModeling.desktop              ║
   ║                                                          ║
   ║   You can now close this Julia session and launch        ║
   ║   the app by double-clicking the desktop icon.           ║
