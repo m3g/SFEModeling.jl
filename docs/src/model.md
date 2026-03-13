@@ -1,6 +1,6 @@
 # Model Description
 
-SFEModeling implements eight kinetic models for supercritical fluid extraction (SFE).
+SFEModeling implements five kinetic models for supercritical fluid extraction (SFE).
 All models relate cumulative extracted mass ``m_e(t)`` to time ``t``.
 The **total extractable mass** is ``m_T = x_0 \cdot m_s``, where ``x_0`` is the initial
 solute loading (kg/kg) and ``m_s`` is the solid mass (kg).
