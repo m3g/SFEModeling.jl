@@ -1,0 +1,56 @@
+name: Windows Installer
+
+on:
+  push:
+    tags: ['*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Windows installer
+    runs-on: windows-latest
+    permissions:
+      contents: write   # needed to create/update the release and upload assets
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Strip the leading 'v' from the tag (v1.0.16 -> 1.0.16).
+      # Falls back to "dev" on manual workflow_dispatch runs without a tag.
+      - name: Resolve version
+        id: version
+        shell: bash
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          if [ "$VERSION" = "$TAG" ] && [ "$GITHUB_REF_TYPE" != "tag" ]; then
+            VERSION="dev"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Installer version: $VERSION"
+
+      # Inno Setup 6 is pre-installed on windows-latest at the path below.
+      - name: Compile installer
+        shell: pwsh
+        run: |
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          & $iscc /DAppVersion=${{ steps.version.outputs.version }} installer\SFEModelling-Installer.iss
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      # Upload the .exe to the GitHub Release that corresponds to the tag.
+      # Creates the release automatically if it does not exist yet.
+      - name: Upload installer to release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
+        with:
+          files: installer/Output/SFEModelling-Installer.exe
+          fail_on_unmatched_files: true
+
+      # On workflow_dispatch (no tag), keep the artifact accessible for 7 days.
+      - name: Upload installer as artifact
+        uses: actions/upload-artifact@v4
+        if: github.ref_type != 'tag'
+        with:
+          name: SFEModelling-Installer-${{ steps.version.outputs.version }}
+          path: installer/Output/SFEModelling-Installer.exe
+          retention-days: 7
