@@ -5,3 +5,4 @@ SFEModeling = "89b22d97-be7f-4761-8b60-7b4b226eb4bd"
 
 [compat]
 Documenter = "1"
+LiveServer = "1.5.0"
