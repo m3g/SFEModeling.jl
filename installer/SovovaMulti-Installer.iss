@@ -1,17 +1,17 @@
-; SFEModelling Windows Installer
+; SFEModeling Windows Installer
 ; Requires Inno Setup 6.1+: https://jrsoftware.org/isinfo.php
 ;   (CreateCallback is needed for the progress timer — added in Inno Setup 6.1)
 ;
 ; Build:  Open this file in the Inno Setup Compiler and click Build > Compile.
-; Output: installer\Output\SFEModelling-Installer.exe
+; Output: installer\Output\SFEModeling-Installer.exe
 
-#define AppName      "SFEModelling"
+#define AppName      "SFEModeling"
 ; AppVersion can be overridden from the command line: ISCC /DAppVersion=1.2.3 ...
 #ifndef AppVersion
   #define AppVersion "1.0.16"
 #endif
 #define AppPublisher "m3g"
-#define AppURL       "https://github.com/m3g/SFEModelling.jl"
+#define AppURL       "https://github.com/m3g/SFEModeling.jl"
 #define JuliaMinMajor 1
 #define JuliaMinMinor 12
 
@@ -261,9 +261,9 @@ begin
   GScriptPath := ExpandConstant('{tmp}\sovova_install.jl');
   SetArrayLength(Lines, 4);
   Lines[0] := 'import Pkg';
-  Lines[1] := 'Pkg.Apps.rm("SFEModelling")';
+  Lines[1] := 'Pkg.Apps.rm("SFEModeling")';
   Lines[1] := 'Pkg.update()';
-  Lines[2] := 'Pkg.Apps.add("SFEModelling")';
+  Lines[2] := 'Pkg.Apps.add("SFEModeling")';
   SaveStringsToFile(GScriptPath, Lines, False);
 end;
 
@@ -331,14 +331,14 @@ end;
 
 procedure StartPkgInstall; forward;
 
-// Run sfemodelling.bat --create-shortcut to create the desktop icon.
+// Run sfemodeling.bat --create-shortcut to create the desktop icon.
 // Called synchronously after Pkg install succeeds; failure is non-fatal.
 procedure CreateDesktopShortcut;
 var
   AppBat: String;
   RC: Integer;
 begin
-  AppBat := ExpandConstant('{%USERPROFILE}\.julia\bin\sfemodelling.bat');
+  AppBat := ExpandConstant('{%USERPROFILE}\.julia\bin\sfemodeling.bat');
   if FileExists(AppBat) then
     Exec(ExpandConstant('{cmd}'), '/C "' + AppBat + '" --create-shortcut', '',
          SW_HIDE, ewWaitUntilTerminated, RC);

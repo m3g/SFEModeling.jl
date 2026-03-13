@@ -1,14 +1,14 @@
-# SFEModelling.jl
+# SFEModeling.jl
 
 *Kinetic model fitting for supercritical fluid extraction.*
 
-[![Build Status](https://github.com/m3g/SFEModelling.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/m3g/SFEModelling.jl/actions/workflows/CI.yml?query=branch%3Amain)
-[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://m3g.github.io/SFEModelling.jl/stable/)
-[![Documentation](https://img.shields.io/badge/docs-dev-blue.svg)](https://m3g.github.io/SFEModelling.jl/dev/)
+[![Build Status](https://github.com/m3g/SFEModeling.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/m3g/SFEModeling.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://m3g.github.io/SFEModeling.jl/stable/)
+[![Documentation](https://img.shields.io/badge/docs-dev-blue.svg)](https://m3g.github.io/SFEModeling.jl/dev/)
 
 ## Overview
 
-SFEModelling.jl fits kinetic models for supercritical fluid extraction (SFE) to one or more
+SFEModeling.jl fits kinetic models for supercritical fluid extraction (SFE) to one or more
 experimental extraction curves. The package:
 
 - Accepts experimental data and operating conditions in **laboratory units** (g, cm, min).

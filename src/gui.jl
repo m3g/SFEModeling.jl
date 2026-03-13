@@ -1,4 +1,4 @@
-## GUI implementation for SFEModelling — served via HTTP.jl + JSON3.jl
+## GUI implementation for SFEModeling — served via HTTP.jl + JSON3.jl
 
 # ── Uploaded data cache ──────────────────────────────────────────────
 const _gui_data   = Ref{Vector{Union{Nothing,Matrix{Float64}}}}([nothing])
@@ -11,7 +11,7 @@ const _GUI_HTML = raw"""
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>SFEModelling — Supercritical Extraction Fitting</title>
+<title>SFEModeling — Supercritical Extraction Fitting</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:system-ui,-apple-system,sans-serif;background:#f4f6fb;color:#23283a}
@@ -100,7 +100,7 @@ table.data tr:hover td{background:#fafafa}
 </style>
 </head>
 <body>
-<h1>SFEModelling &mdash; v__VERSION__</h1>
+<h1>SFEModeling &mdash; v__VERSION__</h1>
 <p class="subtitle">Supercritical fluid extraction — multi-model curve fitting</p>
 
 <div class="container">
@@ -181,8 +181,8 @@ table.data tr:hover td{background:#fafafa}
   <canvas id="chart"></canvas>
 
   <div id="dlrow" class="dl-row">
-    <a id="dl-txt"  href="/api/download?format=txt"  class="dl-btn" download="SFEModelling_results.txt">Download TXT</a>
-    <a id="dl-xlsx" href="/api/download?format=xlsx" class="dl-btn" download="SFEModelling_results.xlsx">Download XLSX</a>
+    <a id="dl-txt"  href="/api/download?format=txt"  class="dl-btn" download="SFEModeling_results.txt">Download TXT</a>
+    <a id="dl-xlsx" href="/api/download?format=xlsx" class="dl-btn" download="SFEModeling_results.xlsx">Download XLSX</a>
   </div>
 
   <div class="card">
@@ -578,7 +578,7 @@ end
 # focus the existing window instead of opening a new one.
 function _open_app_window(url::String)
     port_str   = split(url, ":")[end]
-    profile_dir = joinpath(tempdir(), "sfemodelling_$port_str")
+    profile_dir = joinpath(tempdir(), "sfemodeling_$port_str")
     mkpath(profile_dir)
 
     if Sys.iswindows()
@@ -824,7 +824,7 @@ function _start_gui(port::Int, launch::Bool)
                 "text/plain; charset=utf-8"
             return HTTP.Response(200,
                 ["Content-Type"        => mime,
-                 "Content-Disposition" => "attachment; filename=\"SFEModelling_results.$fmt\"",
+                 "Content-Disposition" => "attachment; filename=\"SFEModeling_results.$fmt\"",
                  "Cache-Control"       => "no-store"],
                 body)
         finally
@@ -866,7 +866,7 @@ function _start_gui(port::Int, launch::Bool)
 
     url = "http://127.0.0.1:$actual_port"
     actual_port != port && @info "Port $port was busy; using $actual_port instead"
-    @info "SFEModelling GUI running at $url — press Ctrl-C to stop"
+    @info "SFEModeling GUI running at $url — press Ctrl-C to stop"
 
     if launch
         try

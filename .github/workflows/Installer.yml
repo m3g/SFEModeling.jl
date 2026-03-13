@@ -34,7 +34,7 @@ jobs:
         shell: pwsh
         run: |
           $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
-          & $iscc /DAppVersion=${{ steps.version.outputs.version }} installer\SFEModelling-Installer.iss
+          & $iscc /DAppVersion=${{ steps.version.outputs.version }} installer\SFEModeling-Installer.iss
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       # Upload the .exe to the GitHub Release that corresponds to the tag.
@@ -43,7 +43,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: github.ref_type == 'tag'
         with:
-          files: installer/Output/SFEModelling-Installer.exe
+          files: installer/Output/SFEModeling-Installer.exe
           fail_on_unmatched_files: true
 
       # On workflow_dispatch (no tag), keep the artifact accessible for 7 days.
@@ -51,6 +51,6 @@ jobs:
         uses: actions/upload-artifact@v4
         if: github.ref_type != 'tag'
         with:
-          name: SFEModelling-Installer-${{ steps.version.outputs.version }}
-          path: installer/Output/SFEModelling-Installer.exe
+          name: SFEModeling-Installer-${{ steps.version.outputs.version }}
+          path: installer/Output/SFEModeling-Installer.exe
           retention-days: 7

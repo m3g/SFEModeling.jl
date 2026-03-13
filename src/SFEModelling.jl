@@ -1,4 +1,4 @@
-module SFEModelling
+module SFEModeling
 
 using BlackBoxOptim
 using DelimitedFiles: readdlm
@@ -147,7 +147,7 @@ include("./models.jl")
 """
     sfegui(; port=9876, launch=true)
 
-Launch a local web-based GUI for SFEModelling.
+Launch a local web-based GUI for SFEModeling.
 
 Opens a browser window at `http://localhost:\$port` where you can:
 - Upload a data file (text or Excel) with time and replicate columns
@@ -163,9 +163,9 @@ function sfegui(; port::Int=9876, launch::Bool=true)
 end
 
 #"""
-#    julia -m SFEModelling [--port PORT] [--no-launch] [--create-shortcut]
+#    julia -m SFEModeling [--port PORT] [--no-launch] [--create-shortcut]
 #
-#Launch the SFEModelling GUI as a standalone app.
+#Launch the SFEModeling GUI as a standalone app.
 #
 #If `--create-shortcut` is passed, a desktop shortcut is created and the app exits
 #without starting the GUI.
@@ -200,9 +200,9 @@ end
 @main
 
 """
-    create_shortcut(; location=:desktop, port=9876, name="SFEModelling")
+    create_shortcut(; location=:desktop, port=9876, name="SFEModeling")
 
-Create a launcher shortcut for the SFEModelling GUI. Supports Windows, macOS, and Linux.
+Create a launcher shortcut for the SFEModeling GUI. Supports Windows, macOS, and Linux.
 
 # Keyword arguments
 - `location`: where to install the shortcut:
@@ -210,17 +210,17 @@ Create a launcher shortcut for the SFEModelling GUI. Supports Windows, macOS, an
   - macOS:   `:desktop` (default) or `:applications` (`/Applications`)
   - Linux:   `:desktop` (default) or `:applications` (`~/.local/share/applications`)
 - `port`: port passed to the app (default: `9876`).
-- `name`: shortcut name (default: `"SFEModelling"`).
+- `name`: shortcut name (default: `"SFEModeling"`).
 
 # Example
 ```julia
-using SFEModelling
+using SFEModeling
 create_shortcut()                          # desktop shortcut, default port
 create_shortcut(location=:applications)    # app menu entry
 create_shortcut(port=8080, name="SFE Fit")
 ```
 """
-function create_shortcut(; location::Symbol=:desktop, port::Int=9876, name::String="SFEModelling")
+function create_shortcut(; location::Symbol=:desktop, port::Int=9876, name::String="SFEModeling")
     if Sys.iswindows()
         _create_shortcut_windows(; location, port, name)
     elseif Sys.isapple()
@@ -256,7 +256,7 @@ function _create_shortcut_windows(; location, port, name)
     app_cmd = let
         found = nothing
         for ext in (".cmd", ".bat")
-            p = joinpath(julia_bin_dir, "sfemodelling" * ext)
+            p = joinpath(julia_bin_dir, "sfemodeling" * ext)
             if isfile(p)
                 found = p
                 break
@@ -275,7 +275,7 @@ function _create_shortcut_windows(; location, port, name)
         target_args = "--port $port"
     else
         target_path = julia_exe
-        target_args = "-m SFEModelling -- --port $port"
+        target_args = "-m SFEModeling -- --port $port"
     end
 
     esc(s) = replace(s, "'" => "''")  # escape for PS single-quoted strings
@@ -286,7 +286,7 @@ function _create_shortcut_windows(; location, port, name)
     \$sc.TargetPath       = '$(esc(target_path))'
     \$sc.Arguments        = '$(esc(target_args))'
     \$sc.WorkingDirectory = '$(esc(homedir()))'
-    \$sc.Description      = 'Launch SFEModelling GUI'
+    \$sc.Description      = 'Launch SFEModeling GUI'
     \$sc.WindowStyle      = 7
     \$sc.IconLocation     = '$(esc(julia_exe))'
     \$sc.Save()
@@ -311,12 +311,12 @@ function _create_shortcut_macos(; location, port, name)
     mkpath(macos_dir)
 
     # Prefer the Pkg.Apps-installed binary; fall back to julia -m
-    launcher = let p = _installed_app_exe("sfemodelling")
+    launcher = let p = _installed_app_exe("sfemodeling")
         if p !== nothing
             "exec '$(replace(p, "'" => "\\'"))' --port $port"
         else
             julia_bin = joinpath(Sys.BINDIR, "julia")
-            "exec '$(replace(julia_bin, "'" => "\\'"))' -m SFEModelling --port $port"
+            "exec '$(replace(julia_bin, "'" => "\\'"))' -m SFEModeling --port $port"
         end
     end
 
@@ -331,7 +331,7 @@ function _create_shortcut_macos(; location, port, name)
     <plist version="1.0"><dict>
       <key>CFBundleName</key>              <string>$name</string>
       <key>CFBundleExecutable</key>        <string>$name</string>
-      <key>CFBundleIdentifier</key>        <string>org.julialang.sfemodelling</string>
+      <key>CFBundleIdentifier</key>        <string>org.julialang.sfemodeling</string>
       <key>CFBundleVersion</key>           <string>1.0</string>
       <key>CFBundlePackageType</key>       <string>APPL</string>
       <key>LSUIElement</key>               <false/>
@@ -367,12 +367,12 @@ function _create_shortcut_linux(; location, port, name)
 """)
 
     # Prefer the Pkg.Apps-installed binary; fall back to julia -m
-    exec_cmd = let p = _installed_app_exe("sfemodelling")
+    exec_cmd = let p = _installed_app_exe("sfemodeling")
         if p !== nothing
             "$p --port $port"
         else
             julia_bin = joinpath(Sys.BINDIR, "julia")
-            "$julia_bin -m SFEModelling --port $port"
+            "$julia_bin -m SFEModeling --port $port"
         end
     end
 
@@ -403,7 +403,7 @@ function _print_install_success(path::String)
     println()
     println("  ╔══════════════════════════════════════════════════════════╗")
     println("  ║                                                          ║")
-    println("  ║   SFEModelling desktop shortcut created successfully!     ║")
+    println("  ║   SFEModeling desktop shortcut created successfully!     ║")
     println("  ║                                                          ║")
     # truncate long paths so the box stays aligned
     label = length(path) > 52 ? "…" * path[end-50:end] : path
@@ -744,7 +744,7 @@ end
 # ── Text export ───────────────────────────────────────────────────────────────
 function _export_txt(filename, result, curves)
     open(filename, "w") do io
-        println(io, "# SFEModelling — Fitting Results")
+        println(io, "# SFEModeling — Fitting Results")
         println(io, "#")
         for (ic, c) in enumerate(curves)
             suffix = length(curves) > 1 ? " (Curve $ic)" : ""

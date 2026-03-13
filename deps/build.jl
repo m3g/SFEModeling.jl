@@ -1,14 +1,14 @@
 # deps/build.jl — executed automatically by Pkg.build() / Pkg.Apps.add()
 #
-# Creates a desktop shortcut for the SFEModelling GUI.
+# Creates a desktop shortcut for the SFEModeling GUI.
 # If shortcut creation fails for any reason (headless server, missing desktop, etc.)
 # the build succeeds anyway — the shortcut can always be created manually with:
 #
-#   using SFEModelling; create_shortcut()
+#   using SFEModeling; create_shortcut()
 
 try
-    using SFEModelling
+    using SFEModeling
     create_shortcut()
 catch e
-    @warn "SFEModelling: could not create desktop shortcut (run `create_shortcut()` manually)" exception=e
+    @warn "SFEModeling: could not create desktop shortcut (run `create_shortcut()` manually)" exception=e
 end

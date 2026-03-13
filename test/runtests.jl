@@ -1,7 +1,7 @@
-using SFEModelling
+using SFEModeling
 using Test
 
-@testset "SFEModelling.jl" begin
+@testset "SFEModeling.jl" begin
 
     @testset "ExtractionCurve construction" begin
         curve = ExtractionCurve(
@@ -51,7 +51,7 @@ using Test
         kya = 0.01
         kxa = 0.001
         xk = 0.03
-        ycal = SFEModelling.simulate(curve, kya, kxa, xk)
+        ycal = SFEModeling.simulate(curve, kya, kxa, xk)
         @test length(ycal) == 10
         @test all(ycal .>= 0.0)
         # Extraction should be monotonically non-decreasing
@@ -79,7 +79,7 @@ using Test
         true_kya = 0.02
         true_kxa = 0.002
         true_xk = 0.03
-        m_ext_true = SFEModelling.simulate(curve_for_gen, true_kya, true_kxa, true_xk)
+        m_ext_true = SFEModeling.simulate(curve_for_gen, true_kya, true_kxa, true_xk)
 
         # Now create curve with this synthetic data (convert back to user units)
         curve = ExtractionCurve(

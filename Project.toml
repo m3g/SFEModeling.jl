@@ -1,4 +1,4 @@
-name = "SFEModelling"
+name = "SFEModeling"
 uuid = "89b22d97-be7f-4761-8b60-7b4b226eb4bd"
 version = "1.0.0-DEV"
 authors = ["Leandro Martinez <lmartine@unicamp.br> and contributors"]
@@ -22,7 +22,7 @@ Printf = "1"
 XLSX = "0.10.4"
 julia = "1.12"
 
-[apps.sfemodelling]
+[apps.sfemodeling]
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

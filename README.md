@@ -1,10 +1,10 @@
-# SFEModelling
+# SFEModeling
 
-[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://m3g.github.io/SFEModelling.jl/stable/)
-[![Documentation](https://img.shields.io/badge/docs-dev-blue.svg)](https://m3g.github.io/SFEModelling.jl/dev/)
-[![Build Status](https://github.com/m3g/SFEModelling.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/m3g/SFEModelling.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Documentation](https://img.shields.io/badge/docs-stable-blue.svg)](https://m3g.github.io/SFEModeling.jl/stable/)
+[![Documentation](https://img.shields.io/badge/docs-dev-blue.svg)](https://m3g.github.io/SFEModeling.jl/dev/)
+[![Build Status](https://github.com/m3g/SFEModeling.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/m3g/SFEModeling.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
-**SFEModelling** fits kinetic models for supercritical fluid extraction (SFE) to experimental extraction curves, using global optimization.
+**SFEModeling** fits kinetic models for supercritical fluid extraction (SFE) to experimental extraction curves, using global optimization.
 
 ## Supported models
 

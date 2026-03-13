@@ -1,6 +1,6 @@
 # Graphical User Interface
 
-SFEModelling includes a **built-in web GUI** — no extra packages or configuration required.
+SFEModeling includes a **built-in web GUI** — no extra packages or configuration required.
 By following the [Installation](@ref) instructions you should be able the launch the GUI by clicking
 on the desktop icon that is generated.
 
@@ -10,7 +10,7 @@ If the desktop icon is not available, or if you experience issues with the icon 
 you can, after installing the Julia package, run it from the REPL, with:
 
 ```julia
-using SFEModelling
+using SFEModeling
 sfegui()
 ```
 

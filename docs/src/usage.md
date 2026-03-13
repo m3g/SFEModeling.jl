@@ -11,7 +11,7 @@ The experimental data is provided as a **matrix** where column 1 is the extracti
 and columns 2, 3, … are cumulative extracted mass (g) for each replicate:
 
 ```@example basic
-using SFEModelling
+using SFEModeling
 
 # Single replicate (2 columns: time, m_ext)
 data = [5.0  0.10;
@@ -155,7 +155,7 @@ The following example uses experimental data from a supercritical CO₂ extracti
 at 333.15 K (data from Mateus et al.), with two replicates:
 
 ```@example complete
-using SFEModelling
+using SFEModeling
 
 # Data matrix: column 1 = time (min), columns 2-3 = replicate m_ext (g)
 data = [
@@ -202,7 +202,7 @@ result = fit_model(curve)
 
 ## Fitting alternative kinetic models
 
-In addition to the Sovová PDE model, SFEModelling provides several empirical kinetic
+In addition to the Sovová PDE model, SFEModeling provides several empirical kinetic
 models that can be fitted with [`fit_model`](@ref):
 
 | Model type | Reference | Parameters |

@@ -4,12 +4,12 @@
 
 For Windows we provide an installer which should take care of all the steps: 
 
-[Download Windows Installer](https://github.com/m3g/SFEModelling.jl/releases/download/v1.2.0/SFEModelling-Installer.exe)
+[Download Windows Installer](https://github.com/m3g/SFEModeling.jl/releases/download/v1.2.0/SFEModeling-Installer.exe)
 
 The installer will: 
 
 1. Install the Julia language if not yet available. 
-2. Install the SFEModelling application.
+2. Install the SFEModeling application.
 3. Add an icon to your desktop.
 
 ## Manual step-by-step installation
@@ -17,7 +17,7 @@ The installer will:
 The manual installation can be performed on all platforms (Linux/MacOS/Windows), and is necessary for the
 advanced (command-line) use of the package.  
 
-There are to installation modes: the SFEModelling *Application* and the SFEModelling *Package*. 
+There are to installation modes: the SFEModeling *Application* and the SFEModeling *Package*. 
 
 - The *Application* is a standalone executable, linked to the desktop icon, and that allows the execution of the package using the graphical user interface. 
 - The *Package* has the same functionalities, but is accessible through the Julia REPL (the terminal) and can be used for advanced scripting, large-scale multiple fits, etc. Installation of the package also gives access to the graphical user interface.
@@ -26,28 +26,28 @@ There are to installation modes: the SFEModelling *Application* and the SFEModel
 
 Install Julia following the instructions of the official Julia distribution page: [https://julialang.org/downloads/](https://julialang.org/downloads/).
 
-### 2. Installing the SFEModelling Application
+### 2. Installing the SFEModeling Application
 
 Start the Julia REPL (which will open the `julia>` terminal), use these commands:
 
 ```julia-repl
-julia> import Pkg; Pkg.Apps.add("SFEModelling")
+julia> import Pkg; Pkg.Apps.add("SFEModeling")
 ```
 
 This will add an icon to your desktop, with which you can start the graphical user interface.
 
-### 3. Installing the SFEModelling Package
+### 3. Installing the SFEModeling Package
 
-The SFEModelling package is installed similarly, but provides the advanced (command-line) interface that allows programming tasks. Installation is performed with the following command:
+The SFEModeling package is installed similarly, but provides the advanced (command-line) interface that allows programming tasks. Installation is performed with the following command:
 
 ```julia-repl
-julia> import Pkg; Pkg.add("SFEModelling")
+julia> import Pkg; Pkg.add("SFEModeling")
 ```
 
 The package is then used with:
 
 ```julia-repl
-julia> using SFEModelling
+julia> using SFEModeling
 ```
 
 The graphical user interface can also be launched, by executing the `sfegui()` command.
@@ -62,12 +62,12 @@ The graphical user interface can also be launched, by executing the `sfegui()` c
 To update the *Application*, start the Jula REPL and use:
 
 ```julia-repl
-julia> import Pkg; Pkg.Apps.update("SFEModelling")
+julia> import Pkg; Pkg.Apps.update("SFEModeling")
 ```
 
 To update the *Package*, use:
 
 ```julia-repl
-julia> import Pkg; Pkg.update("SFEModelling")
+julia> import Pkg; Pkg.update("SFEModeling")
 ```
 

@@ -1,7 +1,7 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 LiveServer = "16fef848-5104-11e9-1b77-fb7a48bbb589"
-SFEModelling = "89b22d97-be7f-4761-8b60-7b4b226eb4bd"
+SFEModeling = "89b22d97-be7f-4761-8b60-7b4b226eb4bd"
 
 [compat]
 Documenter = "1"

@@ -1,14 +1,14 @@
 using Documenter
-using SFEModelling
+using SFEModeling
 using Documenter.Remotes: GitHub
 
 ENV["LINES"] = 10
 ENV["COLUMNS"] = 120
 
 makedocs(;
-    modules=[SFEModelling],
-    sitename="SFEModelling.jl",
-    repo=GitHub("m3g", "SFEModelling.jl"),
+    modules=[SFEModeling],
+    sitename="SFEModeling.jl",
+    repo=GitHub("m3g", "SFEModeling.jl"),
     pages=[
         "Home" => "index.md",
         "Installation" => "installation.md",
@@ -21,7 +21,7 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/m3g/SFEModelling.jl",
+    repo="github.com/m3g/SFEModeling.jl",
     devbranch="main",
     push_preview=true,
 )
