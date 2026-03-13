@@ -53,6 +53,30 @@ The PDE is solved numerically by the method of lines (upwind finite differences 
 
 ---
 
+## Shrinking Core Model (Moreno-Pulido *et al.*, 2026)
+
+A **mechanistic** model describing diffusion-limited leaching from a spherical solid
+particle whose extractable core shrinks as solute is removed. The pseudo-steady-state
+(PSS) analytical solution relates the core radius ``s`` to non-dimensional time via:
+
+```math
+\frac{s^3 - 1}{3} - \frac{s^2 - 1}{2} - \frac{s - 1}{T_m} = t
+```
+
+where ``T_m = R k / D`` is the Thiele modulus, and ``t`` is non-dimensional time
+scaled by the growth time-scale ``\tau_g``: ``t = t_{\mathrm{dim}} / \tau_g``.
+
+The reacted (extracted) volume fraction is ``X(t) = 1 - s^3``.
+
+| Symbol | Description |
+|--------|-------------|
+| ``T_m`` | Thiele modulus ``R k / D`` (dimensionless) |
+| ``\tau_g`` | Growth time-scale (s) |
+
+**Reference:** Moreno-Pulido, C.; Olwande, R.; Myers, T.; Font, F. (2026). Approximate solutions to the shrinking core model and their interpretation. *Appl. Math. Model.*, 154, 116715. [doi:10.1016/j.apm.2025.116715](https://doi.org/10.1016/j.apm.2025.116715)
+
+---
+
 ## Esquível (1999)
 
 Single-exponential empirical model derived from a simplified mass balance:
@@ -124,30 +148,6 @@ m_e(t) = \begin{cases}
 | ``k_4`` | End time of FER phase (s), ``k_4 > k_2`` |
 
 **Reference:** Rodrigues, V.M. *et al.* (2003). *J. Agric. Food Chem.*, 51(6), 1518–1523. [doi:10.1021/jf0257493](https://doi.org/10.1021/jf0257493)
-
----
-
-## Shrinking Core Model (Moreno-Pulido *et al.*, 2026)
-
-A **mechanistic** model describing diffusion-limited leaching from a spherical solid
-particle whose extractable core shrinks as solute is removed. The pseudo-steady-state
-(PSS) analytical solution relates the core radius ``s`` to non-dimensional time via:
-
-```math
-\frac{s^3 - 1}{3} - \frac{s^2 - 1}{2} - \frac{s - 1}{T_m} = t
-```
-
-where ``T_m = R k / D`` is the Thiele modulus, and ``t`` is non-dimensional time
-scaled by the growth time-scale ``\tau_g``: ``t = t_{\mathrm{dim}} / \tau_g``.
-
-The reacted (extracted) volume fraction is ``X(t) = 1 - s^3``.
-
-| Symbol | Description |
-|--------|-------------|
-| ``T_m`` | Thiele modulus ``R k / D`` (dimensionless) |
-| ``\tau_g`` | Growth time-scale (s) |
-
-**Reference:** Moreno-Pulido, C.; Olwande, R.; Myers, T.; Font, F. (2026). Approximate solutions to the shrinking core model and their interpretation. *Appl. Math. Model.*, 154, 116715. [doi:10.1016/j.apm.2025.116715](https://doi.org/10.1016/j.apm.2025.116715)
 
 ---
 
