@@ -11,7 +11,7 @@
 | Model | Parameters | Type |
 |-------|-----------|------|
 | [Sovová (1994)](https://doi.org/10.1016/0009-2509(94)87012-8) | `kya`, `kxa`, `xk/x0` per curve | PDE (broken & intact cells) |
-| [Shrinking Core — Goto, Roy & Hirose (1996)](https://doi.org/10.1016/S0896-8446(96)90009-1) | `Tm`, `tau_g` | Physical — diffusion-limited leaching |
+| [Shrinking Core — Moreno-Pulido *et al.* (2026)](https://doi.org/10.1016/j.apm.2025.116715) | `Tm`, `tau_g` | Physical — diffusion-limited leaching |
 | [Esquível (1999)](https://doi.org/10.1016/S0896-8446(99)00014-5) | `k1` | Empirical — single exponential |
 | [Zekovic (2003)](https://doi.org/10.2298/APT0334125Z) | `k1`, `k2` | Empirical — accessible fraction + rate |
 | [PKM — Maksimovic (2012)](https://doi.org/10.1016/j.proeng.2012.07.571) | `k1`, `k2`, `k3` | Parallel-reaction kinetics |
@@ -37,4 +37,4 @@ Maksimović, S.; Ivanović, J.; Skala, D. (2012). Supercritical extraction of es
 
 Rodrigues, V.M.; Rosa, P.T.V.; Marques, M.O.M.; Petenate, A.J.; Meireles, M.A.A. (2003). Supercritical extraction of essential oil from aniseed using CO₂: Solubility, kinetics, and composition data. *Journal of Agricultural and Food Chemistry*, 51(6), 1518–1523. https://doi.org/10.1021/jf0257493
 
-Goto, M.; Roy, B.C.; Hirose, T. (1996). Shrinking-core leaching model for supercritical-fluid extraction. *Journal of Supercritical Fluids*, 9(2), 128–133. https://doi.org/10.1016/S0896-8446(96)90009-1
+Moreno-Pulido, C.; Olwande, R.; Myers, T.; Font, F. (2026). Approximate solutions to the shrinking core model and their interpretation. *Applied Mathematical Modelling*, 154, 116715. https://doi.org/10.1016/j.apm.2025.116715

@@ -127,7 +127,7 @@ m_e(t) = \begin{cases}
 
 ---
 
-## Shrinking Core Model (Goto, Roy & Hirose, 1996)
+## Shrinking Core Model (Moreno-Pulido *et al.*, 2026)
 
 A **mechanistic** model describing diffusion-limited leaching from a spherical solid
 particle whose extractable core shrinks as solute is removed. The pseudo-steady-state
@@ -147,7 +147,7 @@ The reacted (extracted) volume fraction is ``X(t) = 1 - s^3``.
 | ``T_m`` | Thiele modulus ``R k / D`` (dimensionless) |
 | ``\tau_g`` | Growth time-scale (s) |
 
-**Reference:** Goto, M.; Roy, B.C.; Hirose, T. (1996). Shrinking-core leaching model for supercritical-fluid extraction. *J. Supercrit. Fluids*, 9(2), 128–133. [doi:10.1016/S0896-8446(96)90009-1](https://doi.org/10.1016/S0896-8446(96)90009-1)
+**Reference:** Moreno-Pulido, C.; Olwande, R.; Myers, T.; Font, F. (2026). Approximate solutions to the shrinking core model and their interpretation. *Appl. Math. Model.*, 154, 116715. [doi:10.1016/j.apm.2025.116715](https://doi.org/10.1016/j.apm.2025.116715)
 
 ---
 

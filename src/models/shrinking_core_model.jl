@@ -1,9 +1,10 @@
-# ── Shrinking Core Model (Goto, Roy & Hirose, 1996) ──────────────────────────
+# ── Shrinking Core Model (Moreno-Pulido et al., 2026) ────────────────────────
 #
-# Goto, Roy & Hirose (1996), J. Supercrit. Fluids 9, 128–133
-# Moreno Pulido et al. (2025), arXiv:2507.21042v1
+# Moreno-Pulido, C.; Olwande, R.; Myers, T.; Font, F. (2026).
+# Approximate solutions to the shrinking core model and their interpretation.
+# Appl. Math. Model. 154, 116715.  doi:10.1016/j.apm.2025.116715
 #
-# PSS analytical solution (Eq. 34 from arXiv paper):
+# PSS analytical solution (Eq. 34):
 #
 #     (s³ − 1)/3 − (s² − 1)/2 − Tₘ⁻¹(s − 1) = t      (non-dimensional)
 #
@@ -13,7 +14,7 @@
 """
     ShrinkingCoreModel()
 
-Shrinking Core Model for supercritical fluid extraction (Goto, Roy & Hirose, 1996).
+Shrinking Core Model for supercritical fluid extraction (Moreno-Pulido *et al.*, 2026).
 
 The model describes diffusion-limited leaching from a spherical solid particle whose
 extractable core shrinks as solute is removed.  The pseudo-steady-state (PSS) analytical

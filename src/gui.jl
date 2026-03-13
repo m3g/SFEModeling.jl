@@ -140,7 +140,7 @@ table.data tr:hover td{background:#fafafa}
 <label>Extraction model
   <select id="model-select">
     <option value="sovova" selected>Sovová (1994) — Broken and Intact Cells</option>
-    <option value="shrinkingcore">Shrinking Core (1996) — physical diffusion/reaction</option>
+    <option value="shrinkingcore">Shrinking Core (2026) — physical diffusion/reaction</option>
     <option value="esquivel">Esquível (1999) — single exponential</option>
     <option value="zekovic">Zeković (2003) — accessible fraction + rate</option>
     <option value="pkm">PKM — Maksimovic (2012) — parallel reactions</option>
