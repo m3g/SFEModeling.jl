@@ -4,7 +4,7 @@
 
 For Windows we provide an installer which should take care of all the steps: 
 
-[Download Windows Installer](https://github.com/m3g/SFEModeling.jl/releases/download/v1.0.1/SFEModeling-Installer.exe)
+[Download Windows Installer](https://github.com/m3g/SFEModeling.jl/releases/download/v1.0.2/SFEModeling-Installer.exe)
 
 The installer will: 
 

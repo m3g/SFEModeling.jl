@@ -1,6 +1,6 @@
 name = "SFEModeling"
 uuid = "89b22d97-be7f-4761-8b60-7b4b226eb4bd"
-version = "1.0.1"
+version = "1.0.2"
 authors = ["Leandro Martinez <lmartine@unicamp.br> and contributors"]
 
 [deps]
