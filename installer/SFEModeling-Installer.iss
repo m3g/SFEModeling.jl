@@ -40,6 +40,10 @@ Compression=lzma2
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
+[Tasks]
+Name: "desktopicon"; Description: "Create a &desktop shortcut"
+Name: "startmenu";   Description: "Add to Windows &Start Menu"
+
 [CustomMessages]
 english.InstPageTitle=Installing {#AppName}
 english.InstPageDesc=Please wait while {#AppName} is being installed.
@@ -338,10 +342,24 @@ var
   AppBat: String;
   RC: Integer;
 begin
+  if not IsTaskSelected('desktopicon') then Exit;
   AppBat := ExpandConstant('{%USERPROFILE}\.julia\bin\sfemodeling.bat');
   if FileExists(AppBat) then
     Exec(ExpandConstant('{cmd}'), '/C "' + AppBat + '" --create-shortcut', '',
          SW_HIDE, ewWaitUntilTerminated, RC);
+end;
+
+// Create a Start Menu shortcut pointing to the installed launcher.
+// Called synchronously after Pkg install succeeds; failure is non-fatal.
+procedure CreateStartMenuShortcut;
+var
+  AppBat, LinkPath: String;
+begin
+  if not IsTaskSelected('startmenu') then Exit;
+  AppBat   := ExpandConstant('{%USERPROFILE}\.julia\bin\sfemodeling.bat');
+  LinkPath := ExpandConstant('{userprograms}\{#AppName}.lnk');
+  if FileExists(AppBat) then
+    CreateShellLink(LinkPath, '{#AppName}', AppBat, '', '', '', 0, SW_SHOWNORMAL);
 end;
 
 procedure StartJuliaInstall;
@@ -420,8 +438,9 @@ begin
       WizardForm.Close;
       Exit;
     end;
-    // Create desktop shortcut via the installed app executable
+    // Create desktop / Start Menu shortcuts (conditional on user choices)
     CreateDesktopShortcut;
+    CreateStartMenuShortcut;
     GInstPhase := 2;
     GInstPhaseL.Caption := CustomMessage('InstDone');
     GInstWaitL.Caption  := '';
