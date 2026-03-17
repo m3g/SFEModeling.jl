@@ -40,9 +40,6 @@ Compression=lzma2
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
-[Tasks]
-Name: "desktopicon"; Description: "Create a &desktop shortcut"
-Name: "startmenu";   Description: "Add to Windows &Start Menu"
 
 [CustomMessages]
 english.JuliaPageTitle=Julia Requirement
@@ -83,6 +80,8 @@ var
   // Julia option page
   GJuliaPage:         TWizardPage;
   GInstallJuliaChk:   TCheckBox;  // "install/update Julia automatically"
+  GDesktopChk:        TCheckBox;  // "create desktop shortcut"
+  GStartMenuChk:      TCheckBox;  // "add to Start Menu"
 
   // Install page
   GInstPage:    TWizardPage;
@@ -353,7 +352,7 @@ var
   AppBat: String;
   RC: Integer;
 begin
-  if not IsTaskSelected('desktopicon') then Exit;
+  if not GDesktopChk.Checked then Exit;
   AppBat := ExpandConstant('{%USERPROFILE}\.julia\bin\sfemodeling.bat');
   if FileExists(AppBat) then
     Exec(ExpandConstant('{cmd}'), '/C "' + AppBat + '" --create-shortcut', '',
@@ -366,7 +365,7 @@ procedure CreateStartMenuShortcut;
 var
   AppBat, LinkPath: String;
 begin
-  if not IsTaskSelected('startmenu') then Exit;
+  if not GStartMenuChk.Checked then Exit;
   AppBat   := ExpandConstant('{%USERPROFILE}\.julia\bin\sfemodeling.bat');
   LinkPath := ExpandConstant('{userprograms}\{#AppName}.lnk');
   if FileExists(AppBat) then
@@ -473,7 +472,7 @@ procedure InitializeWizard;
 var
   Surface: TWinControl;
   W, Y: Integer;
-  NoteL: TLabel;
+  NoteL, SepL: TLabel;
 begin
   // ── Julia option page — appears right after the Welcome screen ────────────
   GJuliaPage := CreateCustomPage(wpWelcome,
@@ -482,23 +481,66 @@ begin
   W := Surface.Width;
   Y := 12;
 
+  // AutoSize must be False so the Width assignment is respected and text wraps
+  // correctly instead of collapsing the control to one word wide.
   GInstallJuliaChk := TCheckBox.Create(Surface);
   GInstallJuliaChk.Parent   := Surface;
   GInstallJuliaChk.Left     := 0;
   GInstallJuliaChk.Top      := Y;
+  GInstallJuliaChk.AutoSize := False;
   GInstallJuliaChk.Width    := W;
+  GInstallJuliaChk.Height   := 20;
   GInstallJuliaChk.Caption  := CustomMessage('JuliaInstallCheck');
-  GInstallJuliaChk.Checked  := True;   // on by default
-  Y := Y + 28;
+  GInstallJuliaChk.Checked  := True;
+  Y := Y + 24;
 
   NoteL := TLabel.Create(Surface);
-  NoteL.Parent    := Surface;
-  NoteL.Left      := 0;
-  NoteL.Top       := Y;
-  NoteL.Width     := W;
-  NoteL.WordWrap  := True;
-  NoteL.Caption   := CustomMessage('JuliaInstallNote');
+  NoteL.Parent     := Surface;
+  NoteL.Left       := 20;   // indent under the checkbox tick
+  NoteL.Top        := Y;
+  NoteL.AutoSize   := False;
+  NoteL.Width      := W - 20;
+  NoteL.Height     := 40;
+  NoteL.WordWrap   := True;
+  NoteL.Caption    := CustomMessage('JuliaInstallNote');
   NoteL.Font.Color := $00666666;
+  Y := Y + 48;
+
+  // ── Separator ─────────────────────────────────────────────────────────────
+  SepL := TLabel.Create(Surface);
+  SepL.Parent    := Surface;
+  SepL.Left      := 0;
+  SepL.Top       := Y;
+  SepL.AutoSize  := False;
+  SepL.Width     := W;
+  SepL.Height    := 1;
+  SepL.Caption   := '';
+  // A thin etched line — set colour to a mid-grey
+  SepL.Color      := $00CCCCCC;
+  SepL.Transparent := False;
+  Y := Y + 10;
+
+  // ── Shortcut options ──────────────────────────────────────────────────────
+  GDesktopChk := TCheckBox.Create(Surface);
+  GDesktopChk.Parent   := Surface;
+  GDesktopChk.Left     := 0;
+  GDesktopChk.Top      := Y;
+  GDesktopChk.AutoSize := False;
+  GDesktopChk.Width    := W;
+  GDesktopChk.Height   := 20;
+  GDesktopChk.Caption  := 'Create a desktop shortcut';
+  GDesktopChk.Checked  := True;
+  Y := Y + 24;
+
+  GStartMenuChk := TCheckBox.Create(Surface);
+  GStartMenuChk.Parent   := Surface;
+  GStartMenuChk.Left     := 0;
+  GStartMenuChk.Top      := Y;
+  GStartMenuChk.AutoSize := False;
+  GStartMenuChk.Width    := W;
+  GStartMenuChk.Height   := 20;
+  GStartMenuChk.Caption  := 'Add to Windows Start Menu';
+  GStartMenuChk.Checked  := True;
 
   // ── Custom install page — shown after the (instant) wpInstalling step ─────
   GInstPage := CreateCustomPage(wpInstalling,
