@@ -472,7 +472,8 @@ procedure InitializeWizard;
 var
   Surface: TWinControl;
   W, Y: Integer;
-  NoteL, SepL: TLabel;
+  NoteL: TNewStaticText;
+  SepL:  TLabel;
 begin
   // ── Julia option page — appears right after the Welcome screen ────────────
   GJuliaPage := CreateCustomPage(wpWelcome,
@@ -481,66 +482,61 @@ begin
   W := Surface.Width;
   Y := 12;
 
-  // AutoSize must be False so the Width assignment is respected and text wraps
-  // correctly instead of collapsing the control to one word wide.
+  // TCheckBox respects Width natively — no AutoSize property needed.
   GInstallJuliaChk := TCheckBox.Create(Surface);
-  GInstallJuliaChk.Parent   := Surface;
-  GInstallJuliaChk.Left     := 0;
-  GInstallJuliaChk.Top      := Y;
-  GInstallJuliaChk.AutoSize := False;
-  GInstallJuliaChk.Width    := W;
-  GInstallJuliaChk.Height   := 20;
-  GInstallJuliaChk.Caption  := CustomMessage('JuliaInstallCheck');
-  GInstallJuliaChk.Checked  := True;
+  GInstallJuliaChk.Parent  := Surface;
+  GInstallJuliaChk.Left    := 0;
+  GInstallJuliaChk.Top     := Y;
+  GInstallJuliaChk.Width   := W;
+  GInstallJuliaChk.Height  := 20;
+  GInstallJuliaChk.Caption := CustomMessage('JuliaInstallCheck');
+  GInstallJuliaChk.Checked := True;
   Y := Y + 24;
 
-  NoteL := TLabel.Create(Surface);
-  NoteL.Parent     := Surface;
-  NoteL.Left       := 20;   // indent under the checkbox tick
-  NoteL.Top        := Y;
-  NoteL.AutoSize   := False;
-  NoteL.Width      := W - 20;
-  NoteL.Height     := 40;
-  NoteL.WordWrap   := True;
-  NoteL.Caption    := CustomMessage('JuliaInstallNote');
-  NoteL.Font.Color := $00666666;
-  Y := Y + 48;
+  // TNewStaticText is Inno Setup's own wrapping label: it honours Width and
+  // auto-adjusts its Height to fit the wrapped text — no AutoSize hack needed.
+  NoteL := TNewStaticText.Create(Surface);
+  NoteL.Parent       := Surface;
+  NoteL.Left         := 20;
+  NoteL.Top          := Y;
+  NoteL.Width        := W - 20;
+  NoteL.WordWrap     := True;
+  NoteL.AdjustHeight := True;
+  NoteL.Caption      := CustomMessage('JuliaInstallNote');
+  NoteL.Font.Color   := $00666666;
+  Y := Y + NoteL.Height + 12;
 
-  // ── Separator ─────────────────────────────────────────────────────────────
+  // ── Separator: a thin grey line with vertical breathing room ──────────────
   SepL := TLabel.Create(Surface);
-  SepL.Parent    := Surface;
-  SepL.Left      := 0;
-  SepL.Top       := Y;
-  SepL.AutoSize  := False;
-  SepL.Width     := W;
-  SepL.Height    := 1;
-  SepL.Caption   := '';
-  // A thin etched line — set colour to a mid-grey
-  SepL.Color      := $00CCCCCC;
+  SepL.Parent      := Surface;
+  SepL.Left        := 0;
+  SepL.Top         := Y;
+  SepL.Width       := W;
+  SepL.Height      := 1;
+  SepL.Caption     := '';
+  SepL.Color       := $00CCCCCC;
   SepL.Transparent := False;
-  Y := Y + 10;
+  Y := Y + 12;
 
   // ── Shortcut options ──────────────────────────────────────────────────────
   GDesktopChk := TCheckBox.Create(Surface);
-  GDesktopChk.Parent   := Surface;
-  GDesktopChk.Left     := 0;
-  GDesktopChk.Top      := Y;
-  GDesktopChk.AutoSize := False;
-  GDesktopChk.Width    := W;
-  GDesktopChk.Height   := 20;
-  GDesktopChk.Caption  := 'Create a desktop shortcut';
-  GDesktopChk.Checked  := True;
+  GDesktopChk.Parent  := Surface;
+  GDesktopChk.Left    := 0;
+  GDesktopChk.Top     := Y;
+  GDesktopChk.Width   := W;
+  GDesktopChk.Height  := 20;
+  GDesktopChk.Caption := 'Create a desktop shortcut';
+  GDesktopChk.Checked := True;
   Y := Y + 24;
 
   GStartMenuChk := TCheckBox.Create(Surface);
-  GStartMenuChk.Parent   := Surface;
-  GStartMenuChk.Left     := 0;
-  GStartMenuChk.Top      := Y;
-  GStartMenuChk.AutoSize := False;
-  GStartMenuChk.Width    := W;
-  GStartMenuChk.Height   := 20;
-  GStartMenuChk.Caption  := 'Add to Windows Start Menu';
-  GStartMenuChk.Checked  := True;
+  GStartMenuChk.Parent  := Surface;
+  GStartMenuChk.Left    := 0;
+  GStartMenuChk.Top     := Y;
+  GStartMenuChk.Width   := W;
+  GStartMenuChk.Height  := 20;
+  GStartMenuChk.Caption := 'Add to Windows Start Menu';
+  GStartMenuChk.Checked := True;
 
   // ── Custom install page — shown after the (instant) wpInstalling step ─────
   GInstPage := CreateCustomPage(wpInstalling,
