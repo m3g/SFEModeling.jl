@@ -640,8 +640,6 @@ end
 function _start_gui(port::Int, launch::Bool)
     router = HTTP.Router()
     server_ref = Ref{Any}(nothing)
-    last_ping  = Ref{Float64}(time())
-
     # Serve the HTML page (inject package version into the title)
     _versioned_html = replace(_GUI_HTML, "__VERSION__" => string(pkgversion(@__MODULE__)))
     HTTP.register!(router, "GET", "/", _ -> HTTP.Response(200, ["Content-Type" => "text/html"], _versioned_html))
@@ -782,9 +780,8 @@ function _start_gui(port::Int, launch::Bool)
         end
     end)
 
-    # Heartbeat endpoint — browser pings every 5 s while the page is open
+    # Ping endpoint — kept for compatibility but no longer used for shutdown logic
     HTTP.register!(router, "POST", "/api/ping", function(req)
-        last_ping[] = time()
         return HTTP.Response(200, ["Content-Type" => "application/json"], "{}")
     end)
 
@@ -852,22 +849,6 @@ function _start_gui(port::Int, launch::Bool)
     end
     server === nothing && error("Could not find a free port in range $(port)–$(port+100)")
     server_ref[] = server
-    last_ping[]  = time()
-
-    # Watchdog: shut down if no browser ping for more than 15 s
-    @async begin
-        while true
-            sleep(5)
-            srv = server_ref[]
-            (srv === nothing || !isopen(srv)) && break
-            if time() - last_ping[] > 15.0
-                @info "No browser activity detected — shutting down server."
-                close(srv)
-                break
-            end
-        end
-    end
-
     url = "http://127.0.0.1:$actual_port"
     actual_port != port && @info "Port $port was busy; using $actual_port instead"
     @info "SFEModeling GUI running at $url — press Ctrl-C to stop"
