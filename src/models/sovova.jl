@@ -53,7 +53,7 @@ function simulate!(ws::SimWorkspace, curve::ExtractionCurve, kya, kxa, xk)
     # Recompute porosity from bed geometry (as in Fortran code)
     eps = 1.0 - 4.0 * solid_mass / (π * bed_diameter^2 * bed_height * solid_density)
     # Interstitial velocity
-    v = 4.0 * flow_rate / (solvent_density * π * bed_diameter^2 * eps)
+    v = 4.0 * flow_rate / (π * bed_diameter^2 * eps)
 
     tempo = t[end]
     dt = tempo / nt
@@ -93,7 +93,7 @@ function simulate!(ws::SimWorkspace, curve::ExtractionCurve, kya, kxa, xk)
         end
 
         # Trapezoidal integration of outlet mass flow
-        ynum_curr = ynum_prev + dt * (y[nh + 1] + yant_outlet) * flow_rate / 2.0
+        ynum_curr = ynum_prev + dt * (y[nh + 1] + yant_outlet) * flow_rate * solvent_density / 2.0
 
         # Interpolation: assign to experimental points in [current_t - dt, current_t]
         for i in 1:ndata
