@@ -173,7 +173,8 @@ begin
             ((Major = {#JuliaMinMajor}) and (Minor >= {#JuliaMinMinor}));
 end;
 
-// Scan %LOCALAPPDATA%\Programs\Julia* and return the last (highest) julia.exe found.
+// Scan %LOCALAPPDATA%\Programs\Julia* and return ANY julia.exe found (first match).
+// Used only as a fallback after winget installs Julia, when PATH is not yet updated.
 function FindJuliaInLocalPrograms: String;
 var
   FindRec: TFindRec;
@@ -186,8 +187,10 @@ begin
       repeat
         if FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY <> 0 then begin
           Candidate := BaseDir + '\' + FindRec.Name + '\bin\julia.exe';
-          if FileExists(Candidate) then
-            Result := Candidate; // last match wins when entries are sorted by name/version
+          if FileExists(Candidate) then begin
+            Result := Candidate;
+            Break;
+          end;
         end;
       until not FindNext(FindRec);
     finally
@@ -197,10 +200,12 @@ begin
 end;
 
 // Attempt to locate a julia.exe that satisfies the minimum version.
+// Checks PATH first, then scans ALL Julia* dirs under %LOCALAPPDATA%\Programs.
 // Sets GJuliaExe and returns True on success.
 function DetectJulia: Boolean;
 var
-  Output, Candidate: String;
+  FindRec: TFindRec;
+  BaseDir, Candidate, Output: String;
 begin
   Result := False;
   GJuliaExe := '';
@@ -213,29 +218,54 @@ begin
       Exit;
     end;
 
-  // 2. Try %LOCALAPPDATA%\Programs\Julia*
-  Candidate := FindJuliaInLocalPrograms;
-  if Candidate <> '' then begin
-    if RunAndCapture(Candidate, '--version', Output) then
-      if JuliaVersionOK(Output) then begin
-        GJuliaExe := Candidate;
-        Result := True;
-        Exit;
-      end;
+  // 2. Scan ALL %LOCALAPPDATA%\Programs\Julia* directories
+  // (filesystem order is not guaranteed to be version-sorted, so we check each)
+  BaseDir := ExpandConstant('{localappdata}\Programs');
+  if FindFirst(BaseDir + '\Julia*', FindRec) then begin
+    try
+      repeat
+        if FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY <> 0 then begin
+          Candidate := BaseDir + '\' + FindRec.Name + '\bin\julia.exe';
+          if FileExists(Candidate) and
+             RunAndCapture(Candidate, '--version', Output) and
+             JuliaVersionOK(Output) then begin
+            GJuliaExe := Candidate;
+            Result := True;
+          end;
+        end;
+      until (not FindNext(FindRec)) or Result;
+    finally
+      FindClose(FindRec);
+    end;
   end;
 end;
 
 // Return True if any julia.exe is reachable, regardless of version.
 function DetectAnyJulia: Boolean;
 var
-  Output: String;
+  FindRec: TFindRec;
+  BaseDir, Candidate, Output: String;
 begin
   Result := False;
   if RunAndCapture('julia', '--version', Output) then begin
     Result := True;
     Exit;
   end;
-  Result := FindJuliaInLocalPrograms <> '';
+  // Also scan LocalPrograms for any Julia directory with a julia.exe
+  BaseDir := ExpandConstant('{localappdata}\Programs');
+  if FindFirst(BaseDir + '\Julia*', FindRec) then begin
+    try
+      repeat
+        if FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY <> 0 then begin
+          Candidate := BaseDir + '\' + FindRec.Name + '\bin\julia.exe';
+          if FileExists(Candidate) then
+            Result := True;
+        end;
+      until (not FindNext(FindRec)) or Result;
+    finally
+      FindClose(FindRec);
+    end;
+  end;
 end;
 
 // Return the full path to winget.exe, trying the known AppX location before PATH.
@@ -258,16 +288,21 @@ begin
 end;
 
 // Write the Julia install script to a temp file (avoids shell quoting hell).
+// flush(stdout) after each step ensures output appears in the log incrementally.
 procedure CreateInstallScript;
 var
   Lines: TArrayOfString;
 begin
   GScriptPath := ExpandConstant('{tmp}\sovova_install.jl');
-  SetArrayLength(Lines, 4);
+  SetArrayLength(Lines, 8);
   Lines[0] := 'import Pkg';
-  Lines[1] := 'Pkg.Apps.rm("SFEModeling")';
-  Lines[1] := 'Pkg.update()';
-  Lines[2] := 'Pkg.Apps.add("SFEModeling")';
+  Lines[1] := 'println("Updating Julia registry..."); flush(stdout)';
+  Lines[2] := 'Pkg.Registry.update()';
+  Lines[3] := 'println("Registry updated."); flush(stdout)';
+  Lines[4] := 'println("Installing SFEModeling (this may take a few minutes)..."); flush(stdout)';
+  Lines[5] := 'Pkg.Apps.add("SFEModeling")';
+  Lines[6] := 'println("SFEModeling installed successfully."); flush(stdout)';
+  Lines[7] := '';
   SaveStringsToFile(GScriptPath, Lines, False);
 end;
 
@@ -368,6 +403,8 @@ begin
   GDotIdx    := 0;
   GSentinel  := ExpandConstant('{tmp}\sovova_julia_done.txt');
   GInstPhaseL.Caption := CustomMessage('InstallingJulia');
+  SaveStringToFile(GLogFile,
+    '--- Installing Julia via winget ---' + #13#10, True);
   LaunchBackground(WingetExePath,
     'install --id Julialang.Julia --silent --accept-package-agreements' +
     ' --accept-source-agreements');
@@ -380,6 +417,9 @@ begin
   GDotIdx    := 0;
   GSentinel  := ExpandConstant('{tmp}\sovova_pkg_done.txt');
   GInstPhaseL.Caption := CustomMessage('InstallingPackage');
+  SaveStringToFile(GLogFile,
+    '--- Installing SFEModeling Julia package ---' + #13#10 +
+    'Julia: ' + GJuliaExe + #13#10, True);
   LaunchBackground(GJuliaExe, '"' + GScriptPath + '"');
   StartInstTimer;
 end;
@@ -506,13 +546,13 @@ begin
   GInstWaitL.Font.Color := $00888888;
   Y := Y + 32;
 
-  // "Show details" toggle button
+  // "Show details" toggle button — width is generous to avoid text clipping on high-DPI
   GDetailsBtn := TButton.Create(Surface);
   GDetailsBtn.Parent   := Surface;
   GDetailsBtn.Left     := 0;
   GDetailsBtn.Top      := Y;
-  GDetailsBtn.Width    := 110;
-  GDetailsBtn.Height   := 23;
+  GDetailsBtn.Width    := 140;
+  GDetailsBtn.Height   := 26;
   GDetailsBtn.Caption  := CustomMessage('ShowDetails');
   GDetailsBtn.OnClick  := @OnDetailsClick;
   Y := Y + 30;
