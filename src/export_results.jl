@@ -72,7 +72,7 @@ function _cond_params(c::ExtractionCurve)
      ("x0",                c.x0,                         "kg/kg"),
      ("solid_density",     c.solid_density  / 1000.0,    "g/cm3"),
      ("solvent_density",   c.solvent_density / 1000.0,   "g/cm3"),
-     ("flow_rate",         c.flow_rate * 60.0 * 1000.0,  "cm3/min"),
+     ("flow_rate",         c.flow_rate * 60.0 * 1000.0,  "g/min"),
      ("bed_height",        c.bed_height  * 100.0,        "cm"),
      ("bed_diameter",      c.bed_diameter * 100.0,       "cm"),
      ("particle_diameter", c.particle_diameter * 100.0,  "cm"),

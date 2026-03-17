@@ -13,7 +13,7 @@ Experimental extraction curve data and operating conditions for one experiment.
 - `x0::Float64`: total extractable yield (mass fraction, kg/kg)
 - `solid_density::Float64`: solid density (g/cm³)
 - `solvent_density::Float64`: solvent density (g/cm³)
-- `flow_rate::Float64`: solvent flow rate (cm³/min)
+- `flow_rate::Float64`: solvent mass flow rate (g/min)
 - `bed_height::Float64`: bed height (cm)
 - `bed_diameter::Float64`: bed diameter (cm)
 - `particle_diameter::Float64`: particle diameter (cm)
@@ -39,7 +39,7 @@ struct ExtractionCurve
     x0::Float64                # total extractable (kg/kg)
     solid_density::Float64     # kg/m³
     solvent_density::Float64   # kg/m³
-    flow_rate::Float64         # m³/s
+    flow_rate::Float64         # kg/s
     bed_height::Float64        # m
     bed_diameter::Float64      # m
     particle_diameter::Float64 # m
@@ -86,7 +86,7 @@ function ExtractionCurve(;
     m_ext_si = m_ext ./ 1000.0
     solid_density_si = solid_density * 1000.0
     solvent_density_si = solvent_density * 1000.0
-    flow_rate_si = flow_rate / (60.0 * 1000.0)
+    flow_rate_si = flow_rate / (60.0 * 1000.0)   # g/min → kg/s
     bed_height_si = bed_height / 100.0
     bed_diameter_si = bed_diameter / 100.0
     particle_diameter_si = particle_diameter / 100.0
@@ -108,7 +108,7 @@ function Base.show(io::IO, c::ExtractionCurve)
         ("x₀",              c.x0,                         "kg/kg"),
         ("Solid density",   c.solid_density / 1000.0,     "g/cm³"),
         ("Solvent density", c.solvent_density / 1000.0,   "g/cm³"),
-        ("Flow rate",       c.flow_rate * 60.0 * 1000.0,  "cm³/min"),
+        ("Flow rate",       c.flow_rate * 60.0 * 1000.0,  "g/min"),
         ("Bed height",      c.bed_height * 100.0,         "cm"),
         ("Bed diameter",    c.bed_diameter * 100.0,       "cm"),
         ("Particle diam.",  c.particle_diameter * 100.0,  "cm"),

@@ -220,7 +220,7 @@ const COND_FIELDS = [
   {id:'x0',               label:'x₀ (kg/kg)',             value:'0.05'},
   {id:'solid_density',    label:'Solid density (g/cm³)',  value:'1.1'},
   {id:'solvent_density',  label:'Solvent density (g/cm³)',value:'0.8'},
-  {id:'flow_rate',        label:'Flow rate (cm³/min)',     value:'5.0'},
+  {id:'flow_rate',        label:'Flow rate (g/min)',        value:'5.0'},
   {id:'bed_height',       label:'Bed height (cm)',         value:'20.0'},
   {id:'bed_diameter',     label:'Bed diameter (cm)',       value:'2.0'},
   {id:'particle_diameter',label:'Particle diam. (cm)',     value:'0.05'},
