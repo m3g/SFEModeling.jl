@@ -45,17 +45,18 @@ Name: "desktopicon"; Description: "Create a &desktop shortcut"
 Name: "startmenu";   Description: "Add to Windows &Start Menu"
 
 [CustomMessages]
+english.JuliaPageTitle=Julia Requirement
+english.JuliaPageDesc={#AppName} requires Julia {#JuliaMinMajor}.{#JuliaMinMinor} or later.
+english.JuliaInstallCheck=Install or update Julia {#JuliaMinMajor}.{#JuliaMinMinor}+ automatically using winget (recommended)
+english.JuliaInstallNote=If unchecked, the installer will proceed assuming Julia {#JuliaMinMajor}.{#JuliaMinMinor}+ is already installed and available in PATH. You are responsible for ensuring that is the case.
+english.WingetMissingWarn=winget (Windows Package Manager) was not found, so Julia cannot be installed automatically.%n%nThe installer will proceed anyway. Make sure Julia {#JuliaMinMajor}.{#JuliaMinMinor}+ is installed and in PATH, or install winget and re-run this installer.
 english.InstPageTitle=Installing {#AppName}
 english.InstPageDesc=Please wait while {#AppName} is being installed.
-english.InstallingJulia=Installing Julia via winget...
+english.InstallingJulia=Installing / updating Julia via winget...
 english.InstallingPackage=Installing {#AppName}...
 english.InstDone=Installation complete.
 english.ShowDetails=Show details
 english.HideDetails=Hide details
-english.WingetMissing=winget (Windows Package Manager) was not found.%n%nPlease install Julia {#JuliaMinMajor}.{#JuliaMinMinor}+ manually from https://julialang.org/downloads/ and then re-run this installer.
-english.NeedJuliaInfo=Julia {#JuliaMinMajor}.{#JuliaMinMinor}+ was not found and will be installed automatically via winget.%n%nClick OK to continue.
-english.JuliaNotFoundAfterInstall=Could not locate julia.exe after installation.%n%nPlease install Julia {#JuliaMinMajor}.{#JuliaMinMinor}+ manually from https://julialang.org/downloads/ and re-run this installer.
-english.JuliaTooOld=An older version of Julia was found, but {#AppName} requires Julia {#JuliaMinMajor}.{#JuliaMinMinor}+.%n%nPlease upgrade Julia from https://julialang.org/downloads/ and then re-run this installer.
 english.PkgInstFailed=Failed to install {#AppName}.%n%nYou can install it manually from Julia with:%n%n    import Pkg%n    Pkg.Apps.add("{#AppName}")
 
 [Code]
@@ -77,8 +78,11 @@ function KillTimer(hWnd: HWND; nIDEvent: LongWord): BOOL;
 
 var
   GJuliaExe:    String;   // resolved path to julia.exe
-  GNeedJulia:   Boolean;  // True when Julia must be installed
   GScriptPath:  String;   // temp .jl file passed to julia
+
+  // Julia option page
+  GJuliaPage:         TWizardPage;
+  GInstallJuliaChk:   TCheckBox;  // "install/update Julia automatically"
 
   // Install page
   GInstPage:    TWizardPage;
@@ -232,34 +236,6 @@ begin
             GJuliaExe := Candidate;
             Result := True;
           end;
-        end;
-      until (not FindNext(FindRec)) or Result;
-    finally
-      FindClose(FindRec);
-    end;
-  end;
-end;
-
-// Return True if any julia.exe is reachable, regardless of version.
-function DetectAnyJulia: Boolean;
-var
-  FindRec: TFindRec;
-  BaseDir, Candidate, Output: String;
-begin
-  Result := False;
-  if RunAndCapture('julia', '--version', Output) then begin
-    Result := True;
-    Exit;
-  end;
-  // Also scan LocalPrograms for any Julia directory with a julia.exe
-  BaseDir := ExpandConstant('{localappdata}\Programs');
-  if FindFirst(BaseDir + '\Julia*', FindRec) then begin
-    try
-      repeat
-        if FindRec.Attributes and FILE_ATTRIBUTE_DIRECTORY <> 0 then begin
-          Candidate := BaseDir + '\' + FindRec.Name + '\bin\julia.exe';
-          if FileExists(Candidate) then
-            Result := True;
         end;
       until (not FindNext(FindRec)) or Result;
     finally
@@ -457,17 +433,11 @@ begin
     ExitCode := StrToIntDef(Trim(Lines[0]), 0);
 
   if CurPhase = 0 then begin
-    // Julia install: winget sometimes returns non-zero even on success.
-    // Verify by detection rather than relying solely on the exit code.
+    // Julia install via winget: verify by detection (winget exit code unreliable).
     if not DetectJulia then
       GJuliaExe := FindJuliaInLocalPrograms;
-    if GJuliaExe = '' then begin
-      GInstPhase := -1;
-      RefreshMemo;
-      MsgBox(CustomMessage('JuliaNotFoundAfterInstall'), mbError, MB_OK);
-      WizardForm.Close;
-      Exit;
-    end;
+    if GJuliaExe = '' then
+      GJuliaExe := 'julia';  // last resort — let pkg install produce a clear error
     StartPkgInstall;
   end else begin
     // Pkg install: exit code is reliable
@@ -495,32 +465,42 @@ end;
 function InitializeSetup: Boolean;
 begin
   Result := True;
-  GNeedJulia := not DetectJulia;
   CreateInstallScript;
   GLogFile := ExpandConstant('{tmp}\sovova_install_log.txt');
-
-  if GNeedJulia then begin
-    if DetectAnyJulia then begin
-      // Julia is present but too old — ask the user to upgrade manually.
-      MsgBox(CustomMessage('JuliaTooOld'), mbError, MB_OK);
-      Result := False;
-      Exit;
-    end;
-    if not WingetAvailable then begin
-      MsgBox(CustomMessage('WingetMissing'), mbError, MB_OK);
-      Result := False;
-      Exit;
-    end;
-    MsgBox(CustomMessage('NeedJuliaInfo'), mbInformation, MB_OK);
-  end;
 end;
 
 procedure InitializeWizard;
 var
   Surface: TWinControl;
   W, Y: Integer;
+  NoteL: TLabel;
 begin
-  // Custom install page — shown after the (instant) wpInstalling step.
+  // ── Julia option page — appears right after the Welcome screen ────────────
+  GJuliaPage := CreateCustomPage(wpWelcome,
+    CustomMessage('JuliaPageTitle'), CustomMessage('JuliaPageDesc'));
+  Surface := GJuliaPage.Surface;
+  W := Surface.Width;
+  Y := 12;
+
+  GInstallJuliaChk := TCheckBox.Create(Surface);
+  GInstallJuliaChk.Parent   := Surface;
+  GInstallJuliaChk.Left     := 0;
+  GInstallJuliaChk.Top      := Y;
+  GInstallJuliaChk.Width    := W;
+  GInstallJuliaChk.Caption  := CustomMessage('JuliaInstallCheck');
+  GInstallJuliaChk.Checked  := True;   // on by default
+  Y := Y + 28;
+
+  NoteL := TLabel.Create(Surface);
+  NoteL.Parent    := Surface;
+  NoteL.Left      := 0;
+  NoteL.Top       := Y;
+  NoteL.Width     := W;
+  NoteL.WordWrap  := True;
+  NoteL.Caption   := CustomMessage('JuliaInstallNote');
+  NoteL.Font.Color := $00666666;
+
+  // ── Custom install page — shown after the (instant) wpInstalling step ─────
   GInstPage := CreateCustomPage(wpInstalling,
     CustomMessage('InstPageTitle'), CustomMessage('InstPageDesc'));
   Surface := GInstPage.Surface;
@@ -584,8 +564,20 @@ begin
   // Start fresh log file
   SaveStringToFile(GLogFile, '', False);
 
-  if GNeedJulia then
-    StartJuliaInstall
-  else
+  if GInstallJuliaChk.Checked then begin
+    // User wants Julia installed/updated automatically
+    if not WingetAvailable then begin
+      // winget not found — warn and proceed directly to pkg install
+      MsgBox(CustomMessage('WingetMissingWarn'), mbInformation, MB_OK);
+      if not DetectJulia then
+        GJuliaExe := 'julia';  // let pkg install fail naturally with a clear log
+      StartPkgInstall;
+    end else
+      StartJuliaInstall;
+  end else begin
+    // User opted out — skip Julia, trust their environment
+    if not DetectJulia then
+      GJuliaExe := 'julia';
     StartPkgInstall;
+  end;
 end;
