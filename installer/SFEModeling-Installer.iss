@@ -500,10 +500,10 @@ begin
   NoteL.Left         := 20;
   NoteL.Top          := Y;
   NoteL.Width        := W - 20;
-  NoteL.WordWrap     := True;
-  NoteL.AdjustHeight := True;
-  NoteL.Caption      := CustomMessage('JuliaInstallNote');
-  NoteL.Font.Color   := $00666666;
+  NoteL.WordWrap   := True;
+  NoteL.Caption    := CustomMessage('JuliaInstallNote');
+  NoteL.Font.Color := $00666666;
+  NoteL.AdjustHeight;
   Y := Y + NoteL.Height + 12;
 
   // ── Separator: a thin grey line with vertical breathing room ──────────────
