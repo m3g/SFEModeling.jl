@@ -40,7 +40,7 @@ jobs:
       # Upload the .exe to the GitHub Release that corresponds to the tag.
       # Creates the release automatically if it does not exist yet.
       - name: Upload installer to release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         if: github.ref_type == 'tag'
         with:
           files: installer/Output/SFEModeling-Installer.exe
