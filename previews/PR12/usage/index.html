@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Advanced usage · SFEModeling.jl</title><meta name="title" content="Advanced usage · SFEModeling.jl"/><meta property="og:title" content="Advanced usage · SFEModeling.jl"/><meta property="twitter:title" content="Advanced usage · SFEModeling.jl"/><meta name="description" content="Documentation for SFEModeling.jl."/><meta property="og:description" content="Documentation for SFEModeling.jl."/><meta property="twitter:description" content="Documentation for SFEModeling.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../"><img src="../assets/logo.svg" alt="SFEModeling.jl logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../">SFEModeling.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../installation/">Installation</a></li><li><a class="tocitem" href="../gui/">GUI</a></li><li class="is-active"><a class="tocitem" href>Advanced usage</a><ul class="internal"><li><a class="tocitem" href="#Defining-an-extraction-curve"><span>Defining an extraction curve</span></a></li><li><a class="tocitem" href="#Fitting-a-single-curve"><span>Fitting a single curve</span></a></li><li><a class="tocitem" href="#Reading-data-from-files"><span>Reading data from files</span></a></li><li><a class="tocitem" href="#Fitting-multiple-curves-simultaneously"><span>Fitting multiple curves simultaneously</span></a></li><li><a class="tocitem" href="#Optimizer-options"><span>Optimizer options</span></a></li><li><a class="tocitem" href="#Complete-example-with-real-data"><span>Complete example with real data</span></a></li><li><a class="tocitem" href="#Fitting-alternative-kinetic-models"><span>Fitting alternative kinetic models</span></a></li><li><a class="tocitem" href="#Graphical-User-Interface"><span>Graphical User Interface</span></a></li></ul></li><li><a class="tocitem" href="../model/">Model</a></li><li><a class="tocitem" href="../api/">API Reference</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Advanced usage</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Advanced usage</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/m3g/SFEModeling.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/m3g/SFEModeling.jl/blob/main/docs/src/usage.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Advanced-usage"><a class="docs-heading-anchor" href="#Advanced-usage">Advanced usage</a><a id="Advanced-usage-1"></a><a class="docs-heading-anchor-permalink" href="#Advanced-usage" title="Permalink"></a></h1><p>The advanced usage is based on a programming interface. The package can be run in the Julia REPL, in a Jupyter or Pluto notebook, or in a dedicated programming interface, such as VSCode. Additional tips for a nice programming workflow using Julia can be found at the <a href="https://modernjuliaworkflows.org/">Modern Julia Workflows</a>.</p><h2 id="Defining-an-extraction-curve"><a class="docs-heading-anchor" href="#Defining-an-extraction-curve">Defining an extraction curve</a><a id="Defining-an-extraction-curve-1"></a><a class="docs-heading-anchor-permalink" href="#Defining-an-extraction-curve" title="Permalink"></a></h2><p>Create an <a href="../api/#SFEModeling.ExtractionCurve"><code>ExtractionCurve</code></a> with your experimental data and operating conditions. All inputs use <strong>laboratory units</strong> (g, cm, min) — the package converts to SI internally.</p><p>The experimental data is provided as a <strong>matrix</strong> where column 1 is the extraction time (min) and columns 2, 3, … are cumulative extracted mass (g) for each replicate:</p><pre><code class="language-julia hljs">using SFEModeling
+
+# Single replicate (2 columns: time, m_ext)
+data = [5.0  0.10;
+        10.0 0.25;
+        15.0 0.42;
+        20.0 0.58;
+        30.0 0.85;
+        45.0 1.10;
+        60.0 1.28;
+        90.0 1.45;
+        120.0 1.52]
+
+curve = ExtractionCurve(
+    data           = data,
+    porosity       = 0.4,      # dimensionless
+    x0             = 0.05,     # kg/kg (total extractable yield)
+    solid_density  = 1.1,      # g/cm³
+    solvent_density = 0.8,     # g/cm³
+    flow_rate      = 5.0,      # g/min
+    bed_height     = 20.0,     # cm
+    bed_diameter   = 2.0,      # cm
+    particle_diameter = 0.05,  # cm
+    solid_mass     = 50.0,     # g
+    solubility     = 0.005,    # kg/kg
+)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">ExtractionCurve
+  Property         │         Value │ Unit
+  ─────────────────┼───────────────┼─
+  Porosity         │           0.4 │ —
+  x₀               │          0.05 │ kg/kg
+  Solid density    │           1.1 │ g/cm³
+  Solvent density  │           0.8 │ g/cm³
+  Flow rate        │             5 │ g/min
+  Bed height       │            20 │ cm
+  Bed diameter     │             2 │ cm
+  Particle diam.   │          0.05 │ cm
+  Solid mass       │            50 │ g
+  Solubility       │         0.005 │ kg/kg
+  ─────────────────┼───────────────┼─
+  9 data points  ·  nh=5, nt=2500</code></pre><h2 id="Fitting-a-single-curve"><a class="docs-heading-anchor" href="#Fitting-a-single-curve">Fitting a single curve</a><a id="Fitting-a-single-curve-1"></a><a class="docs-heading-anchor-permalink" href="#Fitting-a-single-curve" title="Permalink"></a></h2><p>Call <a href="../api/#SFEModeling.fit_model"><code>fit_model</code></a> with an <a href="../api/#SFEModeling.ExtractionCurve"><code>ExtractionCurve</code></a>. With no model argument it defaults to the Sovová PDE model:</p><pre><code class="language-julia hljs">result = fit_model(curve)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">ModelFitResult{Sovova}
+  SSR = 2.0755e-08
+
+  Parameter │         Value │ Description
+  ──────────┼───────────────┼─────────────────────────────────────────────
+  xk/x0     │ +5.412591e-01 │ xk/x₀ — accessible solute ratio (—)
+  kya[1]    │ +7.325896e-03 │ kya — fluid-phase mass transfer coeff. (1/s)
+  kxa[1]    │ +6.689499e-05 │ kxa — solid-phase mass transfer coeff. (1/s)
+  tCER[1]   │ +6.228835e+02 │ tCER — CER period duration (s)
+</code></pre><p>The returned object is a <a href="../api/#SFEModeling.ModelFitResult"><code>ModelFitResult</code></a>.</p><p>The calculated extraction curves (in kg) are available as:</p><pre><code class="language-julia hljs">result.ycal[1]  # calculated values for the first (and only) curve</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">9-element Vector{Float64}:
+ 0.0001243973617650786
+ 0.00024939471080555293
+ 0.0003743745736451261
+ ⋮
+ 0.0014206719528663027
+ 0.0015363367582966153</code></pre><h2 id="Reading-data-from-files"><a class="docs-heading-anchor" href="#Reading-data-from-files">Reading data from files</a><a id="Reading-data-from-files-1"></a><a class="docs-heading-anchor-permalink" href="#Reading-data-from-files" title="Permalink"></a></h2><p>Instead of typing the data matrix directly, you can read it from a text or Excel file. Example files are available for download: <a href="../assets/example_data.txt">example_data.txt</a> · <a href="../assets/example_data.xlsx">example_data.xlsx</a></p><h3 id="Text-files-with-[TextTable](@ref)"><a class="docs-heading-anchor" href="#Text-files-with-[TextTable](@ref)">Text files with <a href="../api/#SFEModeling.TextTable"><code>TextTable</code></a></a><a id="Text-files-with-[TextTable](@ref)-1"></a><a class="docs-heading-anchor-permalink" href="#Text-files-with-[TextTable](@ref)" title="Permalink"></a></h3><p>A whitespace-delimited text file with an optional comment header (lines starting with <code>#</code>):</p><pre><code class="nohighlight hljs"># t (min)   rep1 (g)   rep2 (g)
+0.0         0.000      0.000
+5.0         0.110      0.094
+10.0        0.257      0.227</code></pre><pre><code class="language-julia hljs">data = TextTable(&quot;experiment.txt&quot;)
+curve = ExtractionCurve(data=data, porosity=0.4, ...)</code></pre><h3 id="Excel-files-with-[ExcelTable](@ref)"><a class="docs-heading-anchor" href="#Excel-files-with-[ExcelTable](@ref)">Excel files with <a href="../api/#SFEModeling.ExcelTable"><code>ExcelTable</code></a></a><a id="Excel-files-with-[ExcelTable](@ref)-1"></a><a class="docs-heading-anchor-permalink" href="#Excel-files-with-[ExcelTable](@ref)" title="Permalink"></a></h3><p>An <code>.xlsx</code> file where the first row is a header and the remaining rows contain the data matrix (time column + replicate columns):</p><pre><code class="language-julia hljs">data = ExcelTable(&quot;experiment.xlsx&quot;)              # reads first sheet, skips header
+data = ExcelTable(&quot;experiment.xlsx&quot;; sheet=2)      # read a specific sheet
+data = ExcelTable(&quot;experiment.xlsx&quot;; header=false)  # no header row to skip
+curve = ExtractionCurve(data=data, porosity=0.4, ...)</code></pre><h3 id="Discretization"><a class="docs-heading-anchor" href="#Discretization">Discretization</a><a id="Discretization-1"></a><a class="docs-heading-anchor-permalink" href="#Discretization" title="Permalink"></a></h3><p>The numerical solution uses finite differences with <code>nh</code> spatial steps and <code>nt</code> temporal steps (defaults: <code>nh=5</code>, <code>nt=2500</code>). Increase <code>nt</code> for better accuracy at the cost of computation time:</p><pre><code class="language-julia hljs">curve = ExtractionCurve(
+    # ... other arguments ...
+    nh = 10,
+    nt = 5000,
+)</code></pre><h2 id="Fitting-multiple-curves-simultaneously"><a class="docs-heading-anchor" href="#Fitting-multiple-curves-simultaneously">Fitting multiple curves simultaneously</a><a id="Fitting-multiple-curves-simultaneously-1"></a><a class="docs-heading-anchor-permalink" href="#Fitting-multiple-curves-simultaneously" title="Permalink"></a></h2><p>Pass a vector of <a href="../api/#SFEModeling.ExtractionCurve"><code>ExtractionCurve</code></a>s to fit all curves at once. Each curve gets its own <code>kya</code> and <code>kxa</code>, but the ratio <code>xk/x0</code> is <strong>shared</strong> across all curves:</p><pre><code class="language-julia hljs">curve1 = ExtractionCurve(; data=data1, porosity=0.35, ...)
+curve2 = ExtractionCurve(; data=data2, porosity=0.40, ...)
+curve3 = ExtractionCurve(; data=data3, porosity=0.45, ...)
+
+result = fit_model([curve1, curve2, curve3])</code></pre><p>Access per-curve results by index:</p><pre><code class="language-julia hljs">result.kya[2]   # kya for curve 2
+result.kxa[2]   # kxa for curve 2
+result.xk[2]    # xk for curve 2
+result.tcer[2]  # tCER for curve 2
+result.ycal[2]  # calculated curve 2</code></pre><h2 id="Optimizer-options"><a class="docs-heading-anchor" href="#Optimizer-options">Optimizer options</a><a id="Optimizer-options-1"></a><a class="docs-heading-anchor-permalink" href="#Optimizer-options" title="Permalink"></a></h2><p>The fitting uses global optimization from <a href="https://github.com/robertfeldt/BlackBoxOptim.jl">BlackBoxOptim.jl</a>. Control the optimization via keyword arguments:</p><pre><code class="language-julia hljs">result = fit_model(curves;
+    kya_bounds      = (0.0, 0.05),   # bounds for kya (1/s)
+    kxa_bounds      = (0.0, 0.005),  # bounds for kxa (1/s)
+    xk_ratio_bounds = (0.0, 1.0),    # bounds for xk/x0
+    maxevals        = 50_000,        # max function evaluations
+    tracemode       = :silent,       # :silent, :compact, or :verbose
+)</code></pre><p>If the default bounds do not cover your expected parameter range, adjust them accordingly. To see optimizer progress, set <code>tracemode = :compact</code>:</p><pre><code class="language-julia hljs">result = fit_model(curve; tracemode=:compact)</code></pre><h2 id="Complete-example-with-real-data"><a class="docs-heading-anchor" href="#Complete-example-with-real-data">Complete example with real data</a><a id="Complete-example-with-real-data-1"></a><a class="docs-heading-anchor-permalink" href="#Complete-example-with-real-data" title="Permalink"></a></h2><p>The following example uses experimental data from a supercritical CO₂ extraction experiment at 333.15 K (data from Mateus et al.), with two replicates:</p><pre><code class="language-julia hljs">using SFEModeling
+
+# Data matrix: column 1 = time (min), columns 2-3 = replicate m_ext (g)
+data = [
+    0.0   0.0000  0.0000;
+    5.0   0.1097  0.0935;
+   10.0   0.2571  0.2265;
+   15.0   0.3894  0.3507;
+   20.0   0.5228  0.4746;
+   30.0   0.7872  0.7270;
+   45.0   1.1633  1.0636;
+   60.0   1.4848  1.3746;
+   75.0   1.7484  1.6411;
+   90.0   1.9751  1.8913;
+  110.0   2.2485  2.1785;
+  135.0   2.5630  2.5539;
+  155.0   2.7584  2.7690;
+  180.0   3.0323  3.0527;
+  210.0   3.3022  3.3416;
+  240.0   3.5332  3.5906;
+  270.0   3.7349  3.8130;
+  300.0   3.9260  4.0177
+]
+
+# Or read from a file:
+# data = TextTable(&quot;mateus1.txt&quot;)
+# data = ExcelTable(&quot;mateus1.xlsx&quot;)
+
+curve = ExtractionCurve(
+    data              = data,
+    porosity          = 0.7,      # bed porosity (dimensionless)
+    x0                = 0.069,    # total extractable yield (kg/kg)
+    solid_density     = 1.32,     # g/cm³
+    solvent_density   = 0.78023,  # g/cm³
+    flow_rate         = 9.9,      # g/min
+    bed_height        = 9.2,      # cm
+    bed_diameter      = 5.42,     # cm
+    particle_diameter = 0.0337,   # cm
+    solid_mass        = 100.01,   # g
+    solubility        = 0.003166, # kg/kg
+)
+
+result = fit_model(curve)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">ModelFitResult{Sovova}
+  SSR = 6.9552e-08
+
+  Parameter │         Value │ Description
+  ──────────┼───────────────┼─────────────────────────────────────────────
+  xk/x0     │ +7.442551e-01 │ xk/x₀ — accessible solute ratio (—)
+  kya[1]    │ +1.286529e-03 │ kya — fluid-phase mass transfer coeff. (1/s)
+  kxa[1]    │ +2.922037e-05 │ kxa — solid-phase mass transfer coeff. (1/s)
+  tCER[1]   │ +2.616196e+03 │ tCER — CER period duration (s)
+</code></pre><h2 id="Fitting-alternative-kinetic-models"><a class="docs-heading-anchor" href="#Fitting-alternative-kinetic-models">Fitting alternative kinetic models</a><a id="Fitting-alternative-kinetic-models-1"></a><a class="docs-heading-anchor-permalink" href="#Fitting-alternative-kinetic-models" title="Permalink"></a></h2><p>In addition to the Sovová PDE model, SFEModeling provides several empirical kinetic models that can be fitted with <a href="../api/#SFEModeling.fit_model"><code>fit_model</code></a>:</p><table><tr><th style="text-align: left">Model type</th><th style="text-align: left">Reference</th><th style="text-align: left">Parameters</th></tr><tr><td style="text-align: left"><code>ShrinkingCoreModel()</code></td><td style="text-align: left">Moreno-Pulido <em>et al.</em> (2026)</td><td style="text-align: left">Tₘ — Thiele modulus (—); τ_g — growth time-scale (s)</td></tr><tr><td style="text-align: left"><code>Esquivel()</code></td><td style="text-align: left">Esquivel (1999)</td><td style="text-align: left">k₁ — rate constant (1/s)</td></tr><tr><td style="text-align: left"><code>Zekovic()</code></td><td style="text-align: left">Žeković (2003)</td><td style="text-align: left">k₁ — accessible yield fraction (—); k₂ — rate constant (1/s)</td></tr><tr><td style="text-align: left"><code>PKM()</code></td><td style="text-align: left">Fiori et al. (2012)</td><td style="text-align: left">k₁ — easily accessible fraction (—); k₂ — fluid-phase rate (1/s); k₃ — solid-phase rate (1/s)</td></tr><tr><td style="text-align: left"><code>SplineModel()</code></td><td style="text-align: left">—</td><td style="text-align: left">k₁ — CER rate (1/s); k₂ — CER end time (s); k₃ — FER rate (1/s); k₄ — FER end time (s)</td></tr></table><h3 id="Single-curve-fit"><a class="docs-heading-anchor" href="#Single-curve-fit">Single-curve fit</a><a id="Single-curve-fit-1"></a><a class="docs-heading-anchor-permalink" href="#Single-curve-fit" title="Permalink"></a></h3><pre><code class="language-julia hljs">result = fit_model(Esquivel(), curve)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">ModelFitResult{Esquivel}
+  SSR = 8.4460e-07
+
+  Parameter │         Value │ Description
+  ──────────┼───────────────┼─────────────────────────
+  k1        │ +5.347097e-05 │ k₁ — rate constant (1/s)
+</code></pre><h3 id="Multi-curve-fit"><a class="docs-heading-anchor" href="#Multi-curve-fit">Multi-curve fit</a><a id="Multi-curve-fit-1"></a><a class="docs-heading-anchor-permalink" href="#Multi-curve-fit" title="Permalink"></a></h3><p>When a vector of curves is passed, all model parameters are <strong>shared</strong> across curves:</p><pre><code class="language-julia hljs">result = fit_model(PKM(), [curve, curve, curve])</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">ModelFitResult{PKM}
+  SSR = 1.5368e-07
+
+  Parameter │         Value │ Description
+  ──────────┼───────────────┼─────────────────────────────────────
+  k1        │ +3.514222e-01 │ k₁ — easily accessible fraction (—)
+  k2        │ +1.449971e-04 │ k₂ — fluid-phase rate constant (1/s)
+  k3        │ +2.691371e-05 │ k₃ — solid-phase rate constant (1/s)
+</code></pre><pre><code class="language-julia hljs">println(result.ycal[2])   # calculated curve 2 (kg)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">[0.0, 0.0, 0.00013921768534365763, 0.00013921768534365763, 0.00027375194461556885, 0.00027375194461556885, 0.0004037921429086136, 0.0004037921429086136, 0.0005295196650407531, 0.0005295196650407531, 0.0007687243385751801, 0.0007687243385751801, 0.001099298512618111, 0.001099298512618111, 0.0013994718562220891, 0.0013994718562220891, 0.0016727233251466467, 0.0016727233251466467, 0.0019221120066224046, 0.0019221120066224046, 0.0022221131099435685, 0.0022221131099435685, 0.002552426909108029, 0.002552426909108029, 0.0027864664630311217, 0.0027864664630311217, 0.003047413235101583, 0.003047413235101583, 0.0033220436135745937, 0.0033220436135745937, 0.003562458971416914, 0.003562458971416914, 0.00377515367219112, 0.00377515367219112, 0.003965194793306458, 0.003965194793306458]</code></pre><h3 id="Custom-parameter-bounds"><a class="docs-heading-anchor" href="#Custom-parameter-bounds">Custom parameter bounds</a><a id="Custom-parameter-bounds-1"></a><a class="docs-heading-anchor-permalink" href="#Custom-parameter-bounds" title="Permalink"></a></h3><p>Each model has default parameter bounds (see <a href="../api/#SFEModeling.param_spec"><code>param_spec</code></a>). Override them with the <code>param_bounds</code> keyword — a vector of <code>(lower, upper)</code> tuples, one per parameter:</p><pre><code class="language-julia hljs">result = fit_model(PKM(), curve;
+    param_bounds = [(0.0, 1.0), (0.0, 0.01), (0.0, 0.001)],
+    maxevals     = 100_000,
+    tracemode    = :compact,
+)</code></pre><h3 id="Accessing-results"><a class="docs-heading-anchor" href="#Accessing-results">Accessing results</a><a id="Accessing-results-1"></a><a class="docs-heading-anchor-permalink" href="#Accessing-results" title="Permalink"></a></h3><p>The returned <a href="../api/#SFEModeling.ModelFitResult"><code>ModelFitResult</code></a> stores fitted parameters in <code>result.params</code> in the same order as the model&#39;s parameter list:</p><pre><code class="language-julia hljs">result = fit_model(Zekovic(), curve)
+println(result.params[1])  # k1 — accessible yield fraction
+println(result.params[2])  # k2 — rate constant (1/s)
+println(result.ycal[1])    # calculated curve (kg)
+println(result.objective)  # SSR</code></pre><h3 id="Exporting-results"><a class="docs-heading-anchor" href="#Exporting-results">Exporting results</a><a id="Exporting-results-1"></a><a class="docs-heading-anchor-permalink" href="#Exporting-results" title="Permalink"></a></h3><p>Use <a href="../api/#SFEModeling.export_results"><code>export_results</code></a> to write fitting results to a file. The format is determined by the file extension — <code>.xlsx</code> produces an Excel workbook; any other extension produces a space-delimited text file with parameters as <code>#</code>-comment lines (re-readable by <a href="../api/#SFEModeling.TextTable"><code>TextTable</code></a>):</p><pre><code class="language-julia hljs">export_results(&quot;results.txt&quot;,  result, curve)   # text file
+export_results(&quot;results.xlsx&quot;, result, curve)   # Excel workbook
+export_results(&quot;results.txt&quot;,  result, [curve1, curve2])  # multiple curves</code></pre><p>All results share the same <code>show</code> format:</p><pre><code class="nohighlight hljs">julia&gt; result                       # Zekovic example
+ModelFitResult{Zekovic} — 1 curve fitted
+  SSR = 4.2000e-06
+
+  Parameter │         Value │ Description
+  ──────────┼───────────────┼─────────────────────────────────────────
+  k1        │ +8.200000e-01 │ k₁ — accessible yield fraction (—)
+  k2        │ +3.100000e-04 │ k₂ — rate constant (1/s)
+
+julia&gt; result                       # Sovová default, 2 curves
+ModelFitResult{Sovova} — 2 curves fitted
+  SSR = 3.8021e-07
+
+  Parameter │         Value │ Description
+  ──────────┼───────────────┼─────────────────────────────────────────────────────
+  xk/x0     │ +6.521700e-01 │ xk/x₀ — accessible solute ratio (—)
+  kya[1]    │ +2.000000e-02 │ kya — fluid-phase mass transfer coeff. (1/s)
+  kxa[1]    │ +2.000000e-03 │ kxa — solid-phase mass transfer coeff. (1/s)
+  tCER[1]   │ +1.234500e+03 │ tCER — CER period duration (s)
+  kya[2]    │ +1.500000e-02 │ kya — fluid-phase mass transfer coeff. (1/s)
+  kxa[2]    │ +1.800000e-03 │ kxa — solid-phase mass transfer coeff. (1/s)
+  tCER[2]   │ +1.543200e+03 │ tCER — CER period duration (s)</code></pre><h2 id="Graphical-User-Interface"><a class="docs-heading-anchor" href="#Graphical-User-Interface">Graphical User Interface</a><a id="Graphical-User-Interface-1"></a><a class="docs-heading-anchor-permalink" href="#Graphical-User-Interface" title="Permalink"></a></h2><p>See the <a href="@ref &quot;Graphical User Interface&quot;">GUI</a> page for the built-in web interface.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../gui/">« GUI</a><a class="docs-footer-nextpage" href="../model/">Model »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Friday 17 April 2026 01:19">Friday 17 April 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
