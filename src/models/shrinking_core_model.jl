@@ -33,7 +33,7 @@ struct ShrinkingCoreModel <: ExtractionModel end
 
 param_spec(::ShrinkingCoreModel) = [
     ParamSpec("Tm",    "Tₘ — Thiele modulus R·k/D (—)",        0.01,  100.0),
-    ParamSpec("tau_g", "τ_g — growth time-scale (s)",          1.0,   1e5),
+    ParamSpec("tau_g", "τ_g — growth time-scale (s)",          1.0,   1e8),
 ]
 
 function simulate(::ShrinkingCoreModel, curve::ExtractionCurve, p::Vector{Float64})

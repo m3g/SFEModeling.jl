@@ -1,9 +1,9 @@
-# ── PKM — Parallel-kinetics model (Fiori et al., 2012) ───────────────────────
+# ── PKM — Parallel-kinetics model (Maksimović et al., 2012) ─────────────────────
 
 """
     PKM()
 
-Parallel-kinetics model (Fiori et al., 2012):
+Parallel-kinetics model (Maksimović et al., 2012):
 
 ```math
 m_e(t) = m_{total}\\left[k_1(1 - e^{-k_2 t}) + (1-k_1)(1 - e^{-k_3 t})\\right]
