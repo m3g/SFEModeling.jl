@@ -195,4 +195,31 @@ using Test
         @test curve.m_ext[3] ≈ 3.0 / 1000.0
         @test curve.m_ext[4] ≈ 4.0 / 1000.0
     end
+    @testset "Sovova solver: last time point and stability" begin
+        t_vals = collect(0.0:10.0:300.0)
+        mkc(nt, Q) = ExtractionCurve(
+            data = hcat(t_vals, zeros(length(t_vals))),
+            porosity = 0.7,
+            x0 = 0.069,
+            solid_density = 1.32,
+            solvent_density = 0.78023,
+            flow_rate = Q,
+            bed_height = 9.2,
+            bed_diameter = 5.42,
+            particle_diameter = 0.0337,
+            solid_mass = 100.01,
+            solubility = 0.003166,
+            nt = nt,
+        )
+        # The last data point must be computed for any number of time steps
+        for nt in (2500, 7500, 10000, 12345)
+            ycal = SFEModeling.simulate(mkc(nt, 9.9), 1.28e-3, 2.9e-5, 0.743 * 0.069)
+            @test ycal[end] > ycal[end-1]
+        end
+        # Large kya (within default bounds) at low flow must not overflow
+        ycal = SFEModeling.simulate(mkc(2500, 5.0), 0.05, 3e-5, 0.7 * 0.069)
+        @test all(isfinite, ycal)
+        @test all(diff(ycal) .>= -1e-15)
+        @test ycal[end] <= 0.069 * 100.01e-3
+    end
 end

@@ -16,9 +16,9 @@ struct SplineModel <: ExtractionModel end
 
 param_spec(::SplineModel) = [
     ParamSpec("k1", "k₁ — CER rate (1/s)",             0.0, 5e-2),
-    ParamSpec("k2", "k₂ — CER end time (s)",            0.0, 3600.0),
+    ParamSpec("k2", "k₂ — CER end time (s)",            0.0, 36000.0),
     ParamSpec("k3", "k₃ — FER rate (1/s)",             0.0, 1e-2),
-    ParamSpec("k4", "k₄ — FER end time (s)",            0.0, 7200.0),
+    ParamSpec("k4", "k₄ — FER end time (s)",            0.0, 36000.0),
 ]
 
 function simulate(::SplineModel, curve::ExtractionCurve, p::Vector{Float64})

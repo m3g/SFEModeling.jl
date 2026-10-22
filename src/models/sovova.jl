@@ -63,22 +63,27 @@ function simulate!(ws::SimWorkspace, curve::ExtractionCurve, kya, kxa, xk)
     ynum_prev = 0.0
     ynum_curr = 0.0
 
-    current_t = 0.0
-    for _ in 1:nt
-        current_t += dt
+    for it in 1:nt
+        # Compute time from the step index (accumulating dt drifts below t[end])
+        current_t = it == nt ? tempo : it * dt
 
         # Inlet boundary condition
         y[1] = 0.0
 
-        # Spatial loop
+        # Spatial loop: within each cell the fluid concentration relaxes exponentially
+        # towards Y*, which is exact for the cell's rate law and stable for any dh*k/(eps*v)
         for k in 1:nh
             if xs[k] > xk
                 # CER period: J = kya * (Y* - Y)
-                jxy = kya * (solubility - y[k])
+                a = dh * kya / (eps * v)
             else
                 # FER period: J = kxa * x * (1 - Y/Y*)
-                jxy = kxa * xs[k] * (1.0 - y[k] / solubility)
+                a = dh * kxa * xs[k] / (solubility * eps * v)
             end
+            y_next = solubility - (solubility - y[k]) * exp(-a)
+
+            # Cell-averaged flux consistent with the fluid-phase mass balance
+            jxy = (y_next - y[k]) * eps * v / dh
 
             # Update solid concentration
             xs[k] -= dt * jxy * solvent_density / (solid_density * (1.0 - eps))
@@ -88,8 +93,7 @@ function simulate!(ws::SimWorkspace, curve::ExtractionCurve, kya, kxa, xk)
                 yant_outlet = y[nh + 1]
             end
 
-            # Update fluid concentration (spatial march)
-            y[k + 1] = y[k] + dh * jxy / (eps * v)
+            y[k + 1] = y_next
         end
 
         # Trapezoidal integration of outlet mass flow
