@@ -47,7 +47,10 @@ J = \begin{cases}
 | `kxa` (``k_X a``) | Solid-phase volumetric mass-transfer coefficient (1/s) |
 | `xk/x0` (``x_k/x_0``) | Fraction of easily accessible solute |
 
-The PDE is solved numerically by the method of lines (upwind finite differences + explicit Euler).
+The PDE is solved by the method of lines: the bed is divided into `nh` cells, in which the fluid-phase
+equation is integrated exactly (exponential relaxation of ``Y`` towards ``Y^*``, stable for any cell size),
+and the solid phase is advanced with explicit Euler steps over `nt` time steps. The outlet flow is
+integrated with the trapezoidal rule.
 
 **Reference:** Sovová, H. (1994). *Chem. Eng. Sci.*, 49(3), 409–414. [doi:10.1016/0009-2509(94)87012-8](https://doi.org/10.1016/0009-2509(94)87012-8)
 
